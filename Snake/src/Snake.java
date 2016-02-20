@@ -62,5 +62,6 @@ public class Snake {
      */
     public void move(int newx,int newy){
         head.translate(newx, newy);
+        
     }
 }

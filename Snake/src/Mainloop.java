@@ -74,7 +74,6 @@ public class Mainloop {
             pullSnakeBoard();
             dead = true;
             
-            
         }
     }
     
