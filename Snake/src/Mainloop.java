@@ -15,8 +15,8 @@ public class Mainloop {
     boolean dead;
     Snake henery;
     int[][] board;
-    int totalX = 100;
-    int totalY = 100;
+    int totalX = 17;
+    int totalY = 17;
     Mainloop() {
         //Mainloop constructor
         System.out.println("I am in the mainloop constructor");
