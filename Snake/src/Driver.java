@@ -15,7 +15,7 @@ public class Driver {
      * @param args the command line arguments
      */
     public static void main(String[] args){
-        System.out.println("I get here");
+        //System.out.println("I get here");
         Mainloop loop = new Mainloop();
         loop.start();
     }
