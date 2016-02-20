@@ -57,8 +57,8 @@ public class Snake {
      * 6,3
      * 
      * 
-     * @param newx
-     * @param newy
+     * @param newx amount to move in x direction
+     * @param newy amount to move in y direction
      */
     public void move(int newx,int newy){
         head.translate(newx, newy);

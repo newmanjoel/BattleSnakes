@@ -45,7 +45,7 @@ public class Mainloop {
      * If there is a snake we can kill it will return True
      * if there is not a snake we can kill it will return False
      * 
-     * @return boolean
+     * @return If snake can be killed
      */
     public boolean killSnake() {
         System.out.println("I can kill another snake");
@@ -56,8 +56,7 @@ public class Mainloop {
     /**
      * This will retrun the location of the food 
      * 
-     * Returns a Point object
-     * @return
+     * @return A point of food
      */
     public Point locateFood() {
         System.out.println("I found food");
@@ -70,7 +69,7 @@ public class Mainloop {
      * Main starting point that the driver calls
      */
     public void start(){
-        Point[] board = new Point[100];
+        
         while(!dead){
             pullSnakeBoard();
             dead = true;
