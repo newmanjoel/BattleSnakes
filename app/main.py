@@ -16,15 +16,14 @@ def index():
 
     return {
         'color': '#00ffff',
-        'head': head_url
+        'head': "https://drive.google.com/file/d/0B_De2pXMNXxqRVlidzZVMDFaSUU/view?usp=sharing"
     }
 
 
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-
-    # TODO: Do things with data
+    game = data.game
 
     return {
         'taunt': 'battlesnake-python!'
