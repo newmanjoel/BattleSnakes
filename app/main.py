@@ -9,7 +9,7 @@ def static(path):
 
 @bottle.get('/')
 def index():
-    head_url = '%s://%s/static/head.png' % (
+    head_url = '%s:https://drive.google.com/file/d/0B_De2pXMNXxqRVlidzZVMDFaSUU/view?usp=sharing' % (
         bottle.request.urlparts.scheme,
         bottle.request.urlparts.netloc
     )
