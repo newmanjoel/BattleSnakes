@@ -141,7 +141,7 @@ class Snake(object):
         self.hunger -=1                 # loose a hunger, cause a turn has passed
         self.a = self.hunger/100.0
         self.b = self.hunger/100.0
-        localSnakes = np.copy(data['snakes'])   # make sure we dont change the orignal
+        localSnakes = data['snakes']   # make sure we dont change the orignal
         self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
         for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
