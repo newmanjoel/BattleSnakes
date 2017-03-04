@@ -222,7 +222,7 @@ def start():
     return {
         'color': '#00FF00',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
-        'head_url': 'fang;,
+        'head_url': 'fang',
         'name': 'battlesnake-python'
     }
 
