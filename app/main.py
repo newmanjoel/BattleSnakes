@@ -31,9 +31,12 @@ class Snake(object):
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
-        for snake in range(len(toAdd)):
-            for i in range(len(toAdd[snake])):
-                localFrame[toAdd[snake][i][0],toAdd[snake][i][1]] = 1
+        try:
+            for snake in range(len(toAdd)):
+                for i in range(len(toAdd[snake])):
+                    localFrame[toAdd[snake][i][0],toAdd[snake][i][1]] = 1
+        except Exception as e:
+            pass
         #localFrame
         return localFrame
     
