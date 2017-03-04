@@ -82,7 +82,8 @@ class Snake(object):
         for row in range(0,self.rows):
             for col in range(0,self.cols):
                 try:
-                    self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
+                    self.weights[row,col] = 1
+                    #self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
                 except Exception as e:
                     pass
         self.weights = self.weights+self.walls
