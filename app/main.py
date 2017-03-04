@@ -213,7 +213,7 @@ class Snake(object):
          
         points = np.array(self.food.tolist())
         if(len(points)!=0 or data['health_points']>50):
-            points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
+            points = np.array(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
         else:
             points = np.array([[self.snakeBody[-1,0],self.snakeBody[-1,1]]])
         points = np.append(points,[[self.snakeBody[-1,0]+1,self.snakeBody[-1,1]]],0)
