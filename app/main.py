@@ -4,7 +4,7 @@ import networkx as nx
 import numpy as np
 import random
 
-snakes=[]
+
 class Snake(object):
     def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.5,b = 0.5,c = 0.25):
         self.legendString = '~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ!@#$%^&*()_+<>?:"{}|\][/.,'
@@ -268,5 +268,6 @@ def end():
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 if __name__ == '__main__':
-    
+    global snakes
+    snakes=[]
     bottle.run(application, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
