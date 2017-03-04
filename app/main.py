@@ -331,7 +331,7 @@ def start():
 def move():
     data = bottle.request.json 
     try:
-        snek = Snake(data['game_id'],data['width'],data['height'],data['turn'])
+        snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
         taunt = 'W:%s'%(move)
     except Exception as e:
