@@ -12,7 +12,7 @@ class Snake(object):
         self.n = row
         self.rows = row
         self.cols = col
-        self.walls = self.generateWalls(self.n)
+        self.walls = self.generateWalls()
         self.id = unique
         self.method = method
         self.name = newName
