@@ -230,7 +230,7 @@ def start():
     #    bottle.request.urlparts.netloc
     #)
     return {
-        'color': '#ffffff',
+        'color': '#00ffff',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': 'fang',
         'name': 'Vengeful Mittens'
