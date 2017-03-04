@@ -6,11 +6,12 @@ import random
 
 
 class Snake(object):
-   
-    def __init__(self,newName,n,unique=1,method = 'a_star',a = 0.5,b = 0.5,c = 0.25):
-        self.legendString = '~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ'
+    def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.5,b = 0.5,c = 0.25):
+        self.legendString = '~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ!@#$%^&*()_+<>?:"{}|\][/.,'
         self.legendMatrix = []
-        self.n = n
+        self.n = row
+        self.rows = row
+        self.cols = col
         self.walls = self.generateWalls(self.n)
         self.id = unique
         self.method = method
@@ -20,13 +21,13 @@ class Snake(object):
         self.b = b
         self.c = c
         self.gameID = ''
-        for row in range(n+2):
-            for col in range(n+2):
+        for row in range(self.rows+2):
+            for col in range(self.cols+2):
                 self.legendMatrix.append(self.legendString[row]+self.legendString[col])
         self.legendMatrix = np.asarray(self.legendMatrix)
         self.G = nx.Graph()
         self.G.add_nodes_from(self.legendMatrix)
-        self.legendMatrix = self.legendMatrix.reshape((n+2,n+2))
+        self.legendMatrix = self.legendMatrix.reshape((self.rows+2,self.cols+2))
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
@@ -130,16 +131,21 @@ class Snake(object):
             ans=np.append(ans,temp)
         return ans
         
-    def turn(self,snakes,food):
-        unsortedFood = np.copy(food)
-        self.food = np.copy(food)
+    def turn(self,data):
+        
+        unsortedFood = np.copy(data['food'])
+        self.food = np.copy(data['food'])
         self.hunger -=1                 # loose a hunger, cause a turn has passed
         self.a = self.hunger/100.0
         self.b = self.hunger/100.0
-        localSnakes = np.copy(snakes)   # make sure we dont change the orignal
-        snake = localSnakes[self.id]    # isolate just our snake from all the snakes
+        localSnakes = np.copy(data['snakes'])   # make sure we dont change the orignal
+        self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
+        for snek in localSakes:
+            self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
+            if(self.gameID == data['game_id'] and self.id == snek['name']):
+                snake = snek    # isolate just our snake from all the snakes
         
-        self.currentFrame = self.addBarriers(self.walls,localSnakes)     #add all of the snakes to the current frame
+        
         localSnakes = np.delete(localSnakes,self.id,0)              # remove our snake from the local snakes (why, IDK?!)
         self.snakeHead = snake[0]                                   # set the snake head to the first thing in the snake array
         self.currentFrame[self.snakeHead[0],self.snakeHead[1]]=0    # make sure the head is not 1! EXTREMEMLY IMPORTANT
@@ -202,6 +208,7 @@ def index():
     #    bottle.request.urlparts.netloc
     #)
     
+    
     return {
         'color': '#00ffff',
         'head': 'fang'
@@ -214,16 +221,18 @@ def start():
     game_id = data['game_id']
     board_width = data['width']
     board_height = data['height']
+    global snakes
+    snakes = [Snake(data['game_id'],data['height'],data['width'])]
 
-    head_url = '%s://%s/static/head.png' % (
-        bottle.request.urlparts.scheme,
-        bottle.request.urlparts.netloc
-    )
+    #head_url = '%s://%s/static/head.png' % (
+    #    bottle.request.urlparts.scheme,
+    #    bottle.request.urlparts.netloc
+    #)
     return {
         'color': '#00FF00',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': 'fang',
-        'name': 'battlesnake-python'
+        'name': 'Vengeful Mittens'
     }
 
 
@@ -231,12 +240,11 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-
-    # TODO: Do things with data
-    
+    for snek in snakes:
+        move = snek.turn(data)
 
     return {
-        'move': 'left',
+        'move': move,
         'taunt': 'battlesnake-python!'
     }
 
@@ -255,4 +263,5 @@ def end():
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 if __name__ == '__main__':
+    
     bottle.run(application, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
