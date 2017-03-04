@@ -215,7 +215,7 @@ class Snake(object):
 
     def turn(self,data):
 	
-        wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
+        #wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
         self.food = np.copy(data['food'])
