@@ -33,7 +33,10 @@ class Snake(object):
         localFrame = np.copy(beforeFrame)
         
         for coords in range(len(toAdd)):
-            localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
+            if(coords==0):
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 5
+            else:
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
         
         #localFrame
         return localFrame
@@ -88,16 +91,16 @@ class Snake(object):
         for row in range(0,self.rows):
             for col in range(0,self.cols):
                 try:
-                    self.weights[row,col] = 1
-                    #self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
+                    #self.weights[row,col] = 1
+                    self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
                 except Exception as e:
                     pass
         self.weights = self.weights+self.walls
         
     def generateMoveset(self):
-        for row in range(0,self.rows):
-            for col in range (0,self.cols):
-                if(row+1< self.rows):
+        for row in range(self.rows):
+            for col in range (self.cols):
+                if(row+1< self.rows): #make sure I dont go out of bounds
                     if(self.currentFrame[row,col]==0 and self.currentFrame[row+1,col]==0):
                         self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col], weight = (self.weights[row,col]*self.a + self.weights[row+1,col]*self.b))
                 if(row-1>0):        
@@ -137,7 +140,6 @@ class Snake(object):
     def calcDist(self,unsorted):
         ans= np.array([])
         for uns in unsorted: 
-            #print uns
             dx = uns[0]-self.snakeHead[0]
             dy = uns[1]-self.snakeHead[1]
             temp = [pow(pow(dx,2)+pow(dy,2),0.5)]
@@ -170,7 +172,50 @@ class Snake(object):
 						board[coord[i][0]][coord][i][1]] = [snake_len-i, snake_id]
 						
 		return board
-        
+    
+    def lookup(self,node):
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if(node==self.legendMatrix[row,col]):
+                    return (row,col)
+
+    def kom(self,path):
+        localG=  self.G
+        if(path!=''):
+            (endingrow,endingcol) = self.lookup(path[-1])
+            for node in path:
+                (localrow,localcol) = self.lookup(node)
+                try:
+                    localG.remove_edge(node,self.legendMatrix[localrow+1,localcol])
+                except Exception as e:
+                    pass
+                try:
+                    localG.remove_edge(node,self.legendMatrix[localrow-1,localcol])
+                except Exception as e:
+                    pass
+                try:
+                    localG.remove_edge(node,self.legendMatrix[localrow,localcol+1])
+                except Exception as e:
+                    pass
+                try:
+                    localG.remove_edge(node,self.legendMatrix[localrow,localcol-1])
+                except Exception as e:
+                    pass
+            #all nodes to the path are now removed. Test to see if I can get back to my tail
+            points = np.array([[self.snakeBody[-1,0],self.snakeBody[-1,1]]])
+            points = np.append(points,[[self.snakeBody[-1,0]+1,self.snakeBody[-1,1]]],0)
+            points = np.append(points,[[self.snakeBody[-1,0]-1,self.snakeBody[-1,1]]],0)
+            points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]+1]],0)
+            points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]-1]],0)
+            for point in points:
+                try:
+                    nx.astar_path(localG,self.legendMatrix[endingrow,endingcol],self.legendMatrix[point[0],point[1]])
+                    return True #if it reaches this it hasnt errored out therefore there is a path
+                except Exception as e:
+                    pass
+                finally:
+                    return False #if it reaches this it has killed itself, dont do it
+
     def turn(self,data):
 	
 		wallBoard = generateSnakeWalls(data['turn'],data['snakes'])
@@ -181,20 +226,17 @@ class Snake(object):
         self.a = self.hunger/100.0
         self.b = self.hunger/100.0
         localSnakes = data['snakes']   # make sure we dont change the orignal
-        #self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
         self.currentFrame = np.zeros((self.rows,self.cols))
-        #self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
         for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
             if snek['name']=='Vengeful Mittens':
                 snake = snek['coords']    # isolate just our snake from all the snakes
         
         
-        #localSnakes = np.delete(localSnakes,self.id,0)              # remove our snake from the local snakes (why, IDK?!)
         self.snakeHead = snake[0]                                   # set the snake head to the first thing in the snake array
         self.currentFrame[self.snakeHead[0],self.snakeHead[1]]=0    # make sure the head is not 1! EXTREMEMLY IMPORTANT
         snake = np.roll(snake,-1,0)     # circular shift, put the head at the back of the array
-        snakeBody = snake[:-1]          # copy everything but the head
+        self.snakeBody = snake[:-1]          # copy everything but the head
         self.generateDanger()           # generate the danger matrix
         self.generateMoveset()          # generate the moveset
         self.path = ''
@@ -209,20 +251,22 @@ class Snake(object):
             index+=1
          
         points = np.array(self.food.tolist())
-        if(len(points)!=0):
-            points = np.append(points,[[snakeBody[-1,0],snakeBody[-1,1]]],0)
+        if(len(points)!=0 and data['health_points']<50):
+            points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
         else:
-            points = np.array([[snakeBody[-1,0],snakeBody[-1,1]]])
-        points = np.append(points,[[snakeBody[-1,0]+1,snakeBody[-1,1]]],0)
-        points = np.append(points,[[snakeBody[-1,0]-1,snakeBody[-1,1]]],0)
-        points = np.append(points,[[snakeBody[-1,0],snakeBody[-1,1]+1]],0)
-        points = np.append(points,[[snakeBody[-1,0],snakeBody[-1,1]-1]],0)
+            points = np.array([[self.snakeBody[-1,0],self.snakeBody[-1,1]]])
+        points = np.append(points,[[self.snakeBody[-1,0]+1,self.snakeBody[-1,1]]],0)
+        points = np.append(points,[[self.snakeBody[-1,0]-1,self.snakeBody[-1,1]]],0)
+        points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]+1]],0)
+        points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]-1]],0)
+        
         
         for point in points:
             if self.method == 'a_star':
                 try:
                     self.path =  nx.astar_path(self.G,self.legendMatrix[self.snakeHead[0],self.snakeHead[1]],self.legendMatrix[point[0],point[1]])
-                    return self.makeDecision()
+                    if(self.kom(self.path)):
+                        return self.makeDecision()
                     break
                 except Exception as e:
                     #print self.name + '-> Tail Exception: '+ e.message
@@ -284,7 +328,7 @@ def start():
 
 @bottle.post('/move')
 def move():
-    data = bottle.request.json
+    data = bottle.request.json 
     try:
         snek = Snake(data['game_id'],data['width'],data['height'],data['turn'])
         move = snek.turn(data)
