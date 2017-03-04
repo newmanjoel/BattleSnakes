@@ -213,8 +213,7 @@ class Snake(object):
                 finally:
                     return False #if it reaches this it has killed itself, dont do it
 
-    def turn(self,data):
-	
+    def turn(self,data)
         #wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
