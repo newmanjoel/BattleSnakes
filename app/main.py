@@ -221,8 +221,9 @@ def start():
     game_id = data['game_id']
     board_width = data['width']
     board_height = data['height']
-    global snakes
-    snakes = [Snake(data['game_id'],data['height'],data['width'])]
+    
+    
+    
 
     #head_url = '%s://%s/static/head.png' % (
     #    bottle.request.urlparts.scheme,
@@ -241,8 +242,8 @@ def start():
 def move():
     data = bottle.request.json
     try:
-        for snek in snakes:
-            move = snek.turn(data)
+        snek = Snake(data['game_id'],data['width'],data['height'])
+        move = snek.turn(data)
         taunt = 'IT WORKED!'
     except Exception as e:
         move = random.choice(['up','down','left','right'])
