@@ -168,10 +168,10 @@ class Snake(object):
 				board[coords[1][0]][coords[1][1]] = [2, snake_id]
 			else:
 				for i in range(snake_len):
-				if i == 0:
-					board[coords[i][0]][coords[i][0]] = ['H', snake_id]
-				else:
-					board[coords[i][0]][coords[i][1]] = [snake_len-i, snake_id]
+					if i == 0:
+						board[coords[i][0]][coords[i][0]] = ['H', snake_id]
+					else:
+						board[coords[i][0]][coords[i][1]] = [snake_len-i, snake_id]
 					
 		return board
     
