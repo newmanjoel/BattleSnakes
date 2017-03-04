@@ -187,7 +187,7 @@ class Snake(object):
         return self.makeDecision()
       
 
-mysnek = ''
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -210,13 +210,13 @@ def index():
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-    mysnek = Snake(data['game_id'],data['width'])
+
 
     # TODO: Do things with data
 
 
     return {
-        'taunt': mysnek.name + 'hello'
+        'taunt':'hello'
     }
 
 
@@ -228,7 +228,7 @@ def move():
     
 
     return {
-        'move': 'north',
+        'move': 'south',
         'taunt': 'battlesnake-python!'
     }
 
