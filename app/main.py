@@ -146,7 +146,7 @@ class Snake(object):
         self.b = self.hunger/100.0
         localSnakes = data['snakes']   # make sure we dont change the orignal
         #self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
-        
+        self.currentFrame = np.zeros((self.rows,self.cols))
         #self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
         for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
