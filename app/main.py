@@ -88,20 +88,20 @@ class Snake(object):
         self.weights = self.weights+self.walls
         
     def generateMoveset(self):
-        for row in range(1,self.rows-1):
-            for col in range (1,self.cols-1):
-                
-                if(self.currentFrame[row,col]==0 and self.currentFrame[row+1,col]==0):
-                    self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col], weight = (self.weights[row,col]*self.a + self.weights[row+1,col]*self.b))
-                        
-                if(self.currentFrame[row,col]==0 and self.currentFrame[row-1,col]==0):
-                    self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row-1,col], weight = (self.weights[row,col]*self.a + self.weights[row-1,col]*self.b))
-    
-                if(self.currentFrame[row,col]==0 and self.currentFrame[row,col+1]==0):
-                    self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row,col+1], weight = (self.weights[row,col]*self.a + self.weights[row,col+1]*self.b))
-    
-                if(self.currentFrame[row,col]==0 and self.currentFrame[row,col-1]==0):
-                    self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row,col-1], weight = (self.weights[row,col]*self.a + self.weights[row,col-1]*self.b))
+        for row in range(0,self.rows):
+            for col in range (0,self.cols):
+                if(row+1< self.rows):
+                    if(self.currentFrame[row,col]==0 and self.currentFrame[row+1,col]==0):
+                        self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col], weight = (self.weights[row,col]*self.a + self.weights[row+1,col]*self.b))
+                if(row-1>0):        
+                    if(self.currentFrame[row,col]==0 and self.currentFrame[row-1,col]==0):
+                        self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row-1,col], weight = (self.weights[row,col]*self.a + self.weights[row-1,col]*self.b))
+                if(col+1<self.cols):
+                    if(self.currentFrame[row,col]==0 and self.currentFrame[row,col+1]==0):
+                        self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row,col+1], weight = (self.weights[row,col]*self.a + self.weights[row,col+1]*self.b))
+                if(col-1>0):
+                    if(self.currentFrame[row,col]==0 and self.currentFrame[row,col-1]==0):
+                        self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row,col-1], weight = (self.weights[row,col]*self.a + self.weights[row,col-1]*self.b))
                 if(self.currentFrame[row,col]!=0):
                     try:
                         self.G.remove_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col])
