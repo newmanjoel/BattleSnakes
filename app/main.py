@@ -174,11 +174,11 @@ class Snake(object):
             for point in points:
                 try:
                     nx.astar_path(localG,self.legendMatrix[endingrow,endingcol],self.legendMatrix[point[0],point[1]])
-                    return False #if it reaches this it hasnt errored out therefore there is a path
+                    return True #if it reaches this it hasnt errored out therefore there is a path
                 except Exception as e:
                     pass
                 finally:
-                    return True #if it reaches this it has killed itself, dont do it
+                    return False #if it reaches this it has killed itself, dont do it
     def turn(self,data):
         
         unsortedFood = np.copy(data['food'])
