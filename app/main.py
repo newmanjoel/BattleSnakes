@@ -213,7 +213,7 @@ class Snake(object):
                 finally:
                     return False #if it reaches this it has killed itself, dont do it
 
-
+    '''
     def checkFood(self,points):
         itemsToRemove =[]
         for snek in data['snakes']:
@@ -228,6 +228,7 @@ class Snake(object):
                         if(temp==1):
                             itemsToRemove.append(point)
         return np.delete(points,itemsToRemove,axis=0)
+        '''
             
     def turn(self,data):
         self.alldata = data
