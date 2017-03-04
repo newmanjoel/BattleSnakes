@@ -228,7 +228,7 @@ def move():
     
 
     return {
-        'move': 'right',
+        'move': 'left',
         'taunt': 'battlesnake-python!'
     }
 
