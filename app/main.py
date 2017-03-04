@@ -33,7 +33,10 @@ class Snake(object):
         localFrame = np.copy(beforeFrame)
         
         for coords in range(len(toAdd)):
-            localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
+            if(coords==0):
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 5
+            else:
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
         
         #localFrame
         return localFrame
