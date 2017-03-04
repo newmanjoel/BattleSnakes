@@ -213,6 +213,7 @@ class Snake(object):
                 finally:
                     return False #if it reaches this it has killed itself, dont do it
 
+
     def checkFood(self,points):
         itemsToRemove =[]
         for snek in data['snakes']:
