@@ -216,7 +216,7 @@ class Snake(object):
     
     def checkFood(self,points):
         itemsToRemove =[]
-        for snek in data['snakes']:
+        for snek in self.alldata['snakes']:
             if(snek['name']!='Vengeful Mittens'):
                 body = snek['coords']
                 head = body[0]
@@ -227,8 +227,11 @@ class Snake(object):
                         temp = pow(pow(dx,2)+pow(dy,2),0.5)
                         if(temp==1):
                             itemsToRemove.append(point)
-    #        np.delete(points,itemsToRemove,axis=0)
-        return points
+                            
+                    except Exception as e:
+                        pass
+            
+        return np.delete(points,itemsToRemove,axis=0)
         
             
     def turn(self,data):
