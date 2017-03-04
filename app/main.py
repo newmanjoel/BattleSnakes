@@ -45,17 +45,17 @@ class Snake(object):
     def makeDecision(self):
         try:
             if(self.path==''):
-                return 'North'
+                return 'up'
             if(len(self.path)==1):
-                return 'North'
+                return 'down'
             if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
-                return 'North'
+                return 'up'
             if(self.path[1]==self.legendMatrix[self.snakeHead[0]-1,self.snakeHead[1]]):
-                return 'South'
+                return 'down'
             if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]+1]):
-                return 'East'
+                return 'right'
             if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]-1]):
-                return 'West'
+                return 'left'
         except Exception as e:
             print 'DECISION ERROR: '+ e.message
             print 'snakeHead: '
