@@ -76,7 +76,7 @@ class Snake(object):
                 if(self.currentFrame[row,col]==0 and self.currentFrame[row+1,col]==0):
                     self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col], weight = (self.weights[row,col]*self.a + self.weights[row+1,col]*self.b))
                         
-                if(self.currentFrame[row,col]==0and self.currentFrame[row-1,col]==0):
+                if(self.currentFrame[row,col]==0 and self.currentFrame[row-1,col]==0):
                     self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row-1,col], weight = (self.weights[row,col]*self.a + self.weights[row-1,col]*self.b))
     
                 if(self.currentFrame[row,col]==0 and self.currentFrame[row,col+1]==0):
