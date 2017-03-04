@@ -143,9 +143,12 @@ class Snake(object):
         self.b = self.hunger/100.0
         localSnakes = data['snakes']   # make sure we dont change the orignal
         self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
+        
+        #self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
         for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
-            snake = snek    # isolate just our snake from all the snakes
+            if snek['name']=='Vengeful Mittens':
+                snake = snek['coords']    # isolate just our snake from all the snakes
         
         
         #localSnakes = np.delete(localSnakes,self.id,0)              # remove our snake from the local snakes (why, IDK?!)
