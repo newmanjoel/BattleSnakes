@@ -196,14 +196,14 @@ def static(path):
 
 @bottle.get('/')
 def index():
-    head_url = '%s://%s/static/head.png' % (
-        bottle.request.urlparts.scheme,
-        bottle.request.urlparts.netloc
-    )
+    #head_url = '%s://%s/static/head.png' % (
+    #    bottle.request.urlparts.scheme,
+    #    bottle.request.urlparts.netloc
+    #)
 
     return {
         'color': '#00ffff',
-        'head': "https://drive.google.com/file/d/0B_De2pXMNXxqRVlidzZVMDFaSUU/view?usp=sharing"
+        'head': 'fang'
     }
 
 
