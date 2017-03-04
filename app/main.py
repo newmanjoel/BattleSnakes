@@ -210,7 +210,7 @@ def index():
     
     
     return {
-        'color': '#00ffff',
+        'color': '#ffffff',
         'head': 'fang'
     }
 
@@ -229,7 +229,7 @@ def start():
     #    bottle.request.urlparts.netloc
     #)
     return {
-        'color': '#00FF00',
+        'color': '#ffffff',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': 'fang',
         'name': 'Vengeful Mittens'
@@ -240,12 +240,17 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-    for snek in snakes:
-        move = snek.turn(data)
+    try:
+        for snek in snakes:
+            move = snek.turn(data)
+        taunt = 'IT WORKED!'
+    except Exception as e:
+        move = random.choice(['up','down','left','right'])
+        taunt = e.message
 
     return {
         'move': move,
-        'taunt': 'battlesnake-python!'
+        'taunt': taunt
     }
 
 
