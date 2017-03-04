@@ -6,13 +6,13 @@ import random
 
 
 class Snake(object):
-    def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.5,b = 0.5,c = 0.25):
+    def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.7,b = 0.7,c = 0.1):
         self.legendString = '~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ!@#$%^&*()_+<>?:"{}|\][/.,'
         self.legendMatrix = []
         self.n = row
         self.rows = row
         self.cols = col
-        self.walls = self.generateWalls()
+        #self.walls = self.generateWalls()
         self.id = unique
         self.method = method
         self.name = newName
@@ -34,7 +34,7 @@ class Snake(object):
         
         for coords in range(len(toAdd)):
             if(coords==0):
-                localFrame[toAdd[coords][0],toAdd[coords][1]] = 5
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 100
             else:
                 localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
         
@@ -95,7 +95,7 @@ class Snake(object):
                     self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
                 except Exception as e:
                     pass
-        self.weights = self.weights+self.walls
+        self.weights = self.weights#+self.walls
         
     def generateMoveset(self):
         for row in range(self.rows):
@@ -145,33 +145,30 @@ class Snake(object):
             temp = [pow(pow(dx,2)+pow(dy,2),0.5)]
             ans=np.append(ans,temp)
         return ans
-		
-	def generateSnakeWalls(self, turn, snakeList): #snakeList: snakes list
-		boardXlen = self.row
-		boardYlen = self.cols
-		board = []
-		for i in range(boardXlen):
-			board.append([])
-			for j in range(boardYlen):
-				board[i].append(0)
-		
-		for snake in snakeList:
-			snake_len = len(snake['coords'])
-			snake_id = snake['id']
-			coords = snake['coords']
-			if turn == 0:
-				board[coords[0][0]][coords[0][1]] = ['H', snake_id]
-			elif turn == 1:
-				board[coords[0][0]][coords[0][1]] = ['H', snake_id]
-				board[coords[1][0]][coords[1][1]] = [2, snake_id]
-			else:
-				for i in range(snake_len):
-					if i == 0:
-						board[coord[i][0]][coord[i][0]] = ['H', snake_id]
-					else:
-						board[coord[i][0]][coord][i][1]] = [snake_len-i, snake_id]
-						
-		return board
+    def generateSnakeWalls(self, turn, snakeList): #snakeList: snakes list
+        boardXlen = self.rows
+        boardYlen = self.cols
+        board = []
+        for i in range(boardXlen):
+            board.append([])
+            for j in range(boardYlen):
+                board[i].append(0)
+                for snake in snakeList:
+                    snake_len = len(snake['coords'])
+                    snake_id = snake['id']
+                    coords = snake['coords']
+                    if turn == 0:
+                        board[coords[0][0]][coords[0][1]] = ['H', snake_id]
+                    elif turn == 1:
+                        board[coords[0][0]][coords[0][1]] = ['H', snake_id]
+                        board[coords[1][0]][coords[1][1]] = [2, snake_id]
+                    else:
+                        for i in range(snake_len):
+                            if i == 0:
+                                board[coords[i][0]][coords[i][0]] = ['H', snake_id]
+                            else:
+                                board[coords[i][0]][coords[i][1]] = [snake_len-i, snake_id]			
+        return board
     
     def lookup(self,node):
         for row in range(self.rows):
@@ -216,9 +213,8 @@ class Snake(object):
                 finally:
                     return False #if it reaches this it has killed itself, dont do it
 
-    def turn(self,data):
-	
-		#wallBoard = generateSnakeWalls(data['turn'],data['snakes'])
+    def turn(self,data)
+        #wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
         self.food = np.copy(data['food'])
@@ -252,7 +248,7 @@ class Snake(object):
             index+=1
          
         points = np.array(self.food.tolist())
-        if(len(points)!=0 and allsnakeData['health_points']<50):
+        if(len(points)!=0):
             points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
         else:
             points = np.array([[self.snakeBody[-1,0],self.snakeBody[-1,1]]])
@@ -331,7 +327,7 @@ def start():
 def move():
     data = bottle.request.json 
     try:
-        snek = Snake(data['game_id'],data['width'],data['height'],data['turn'])
+        snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
         taunt = 'W:%s'%(move)
     except Exception as e:
