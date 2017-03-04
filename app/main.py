@@ -217,9 +217,9 @@ class Snake(object):
     def checkFood(self,points):
         itemsToRemove =[]
         for snek in self.alldata['snakes']:
+            body = snek['coords']
+            head = body[0]
             if(snek['name']!='Vengeful Mittens'):
-                body = snek['coords']
-                head = body[0]
                 for point in range(len(points)):
                     try:
                         dx = point[0]-head[0]
@@ -228,6 +228,37 @@ class Snake(object):
                         if(temp==1):
                             itemsToRemove.append(point)
                             
+                    except Exception as e:
+                        pass
+            else:
+                for point in range(len(points)):
+                    try:
+                        dx = point[0]-head[0]
+                        dy = point[1]-head[1]
+                        temp = pow(pow(dx,2)+pow(dy,2),0.5)
+                        temp21 = 0
+                        temp22 = 0
+                        temp23 = 0
+                        temp24 = 0
+                        try:
+                            temp21 = self.currentFrame[point[0],point[1]+1]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp22 = self.currentFrame[point[0],point[1]-1]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp23 = self.currentFrame[point[0]+1,point[1]]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp24 = self.currentFrame[point[0]-1,point[1]]
+                        except Exception as e:
+                            pass
+                        temp2 = temp21+temp22+temp23+temp24
+                        if(temp<3 and temp2==3):
+                            itemsToRemove.append(point)
                     except Exception as e:
                         pass
             
