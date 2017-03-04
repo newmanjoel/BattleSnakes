@@ -37,11 +37,17 @@ class Snake(object):
         
         #localFrame
         return localFrame
-    
+	
+	
+				
+		
+			
+    '''
     def generateWalls(self):
         output_args = np.ones((self.rows,self.cols))
         output_args[0:self.rows,0:self.cols] = np.zeros((self.rows,self.cols))
         return output_args
+	'''
     
     def makeDecision(self):
         try:
@@ -137,8 +143,37 @@ class Snake(object):
             temp = [pow(pow(dx,2)+pow(dy,2),0.5)]
             ans=np.append(ans,temp)
         return ans
+		
+	def generateSnakeWalls(self, turn, snakeList): #snakeList: snakes list
+		boardXlen = self.row
+		boardYlen = self.cols
+		board = []
+		for i in range(boardXlen):
+			board.append([])
+			for j in range(boardYlen):
+				board[i].append(0)
+		
+		for snake in snakeList:
+			snake_len = len(snake['coords'])
+			snake_id = snake['id']
+			coords = snake['coords']
+			if turn == 0:
+				board[coords[0][0]][coords[0][1]] = ['H', snake_id]
+			elif turn == 1:
+				board[coords[0][0]][coords[0][1]] = ['H', snake_id]
+				board[coords[1][0]][coords[1][1]] = [2, snake_id]
+			else:
+				for i in range(snake_len):
+					if i == 0:
+						board[coord[i][0]][coord[i][0]] = ['H', snake_id]
+					else:
+						board[coord[i][0]][coord][i][1]] = [snake_len-i, snake_id]
+						
+		return board
         
     def turn(self,data):
+	
+		wallBoard = generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
         self.food = np.copy(data['food'])
@@ -251,7 +286,7 @@ def start():
 def move():
     data = bottle.request.json
     try:
-        snek = Snake(data['game_id'],data['width'],data['height'])
+        snek = Snake(data['game_id'],data['width'],data['height'],data['turn'])
         move = snek.turn(data)
         taunt = 'W:%s'%(move)
     except Exception as e:
