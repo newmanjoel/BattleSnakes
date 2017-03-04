@@ -210,13 +210,9 @@ def index():
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-<<<<<<< HEAD
-
 
     # TODO: Do things with data
-=======
-    game = data.game
->>>>>>> origin/master
+
 
 
     return {
