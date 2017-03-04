@@ -147,7 +147,7 @@ class Snake(object):
         return ans
 		
 	def generateSnakeWalls(self, turn, snakeList): #snakeList: snakes list
-		boardXlen = self.row
+		boardXlen = self.rows
 		boardYlen = self.cols
 		board = []
 		for i in range(boardXlen):
@@ -167,9 +167,9 @@ class Snake(object):
 			else:
 				for i in range(snake_len):
 					if i == 0:
-						board[coord[i][0]][coord[i][0]] = ['H', snake_id]
+						board[coords[i][0]][coords[i][0]] = ['H', snake_id]
 					else:
-						board[coord[i][0]][coord][i][1]] = [snake_len-i, snake_id]
+						board[coords[i][0]][coords[i][1]] = [snake_len-i, snake_id]
 						
 		return board
     
@@ -218,7 +218,7 @@ class Snake(object):
 
     def turn(self,data):
 	
-		wallBoard = generateSnakeWalls(data['turn'],data['snakes'])
+        wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
         self.food = np.copy(data['food'])
