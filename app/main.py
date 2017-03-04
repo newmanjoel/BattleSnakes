@@ -1,5 +1,6 @@
 import bottle
 import os
+import networkx
 
 
 @bottle.route('/static/<path:path>')
