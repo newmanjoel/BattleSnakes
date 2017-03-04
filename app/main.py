@@ -143,7 +143,7 @@ class Snake(object):
         self.b = self.hunger/100.0
         localSnakes = np.copy(data['snakes'])   # make sure we dont change the orignal
         self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
-        for snek in localSakes:
+        for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
             if(self.gameID == data['game_id'] and self.id == snek['name']):
                 snake = snek    # isolate just our snake from all the snakes
