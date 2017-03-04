@@ -49,14 +49,26 @@ class Snake(object):
                 return 'up'
             if(len(self.path)==1):
                 return 'down'
-            if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
-                return 'down'#was up
-            if(self.path[1]==self.legendMatrix[self.snakeHead[0]-1,self.snakeHead[1]]):
-                return 'up'#was down
-            if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]+1]):
-                return 'left'#was right
-            if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]-1]):
-                return 'right'#was left
+            try:
+                if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
+                    return 'down'#was up
+            except Exception as e:
+                pass
+            try:
+                if(self.path[1]==self.legendMatrix[self.snakeHead[0]-1,self.snakeHead[1]]):
+                    return 'up'#was down
+            except Exception as e:
+                pass
+            try:
+                if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]+1]):
+                    return 'left'#was right
+            except Exception as e:
+                pass
+            try:
+                if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]-1]):
+                    return 'right'#was left
+            except Exception as e:
+                pass
         except Exception as e:
             print 'DECISION ERROR: '+ e.message
             print 'snakeHead: '
