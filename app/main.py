@@ -2,6 +2,7 @@ import bottle
 import os
 import networkx as nx
 import numpy as np
+import random
 
 
 class Snake(object):
@@ -200,7 +201,7 @@ def index():
     #    bottle.request.urlparts.scheme,
     #    bottle.request.urlparts.netloc
     #)
-
+    
     return {
         'color': '#00ffff',
         'head': 'fang'
@@ -210,14 +211,21 @@ def index():
 @bottle.post('/start')
 def start():
     data = bottle.request.json
+    game_id = data['game_id']
+    board_width = data['width']
+    board_height = data['height']
 
-    # TODO: Do things with data
-
-
-
+    head_url = '%s://%s/static/head.png' % (
+        bottle.request.urlparts.scheme,
+        bottle.request.urlparts.netloc
+    )
     return {
-        'taunt':'hello'
+        'color': '#00FF00',
+        'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+        'head_url': 'fang;,
+        'name': 'battlesnake-python'
     }
+
 
 
 @bottle.post('/move')
