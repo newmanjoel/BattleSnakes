@@ -146,10 +146,10 @@ class Snake(object):
         for snek in localSnakes:
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
             if(self.gameID == data['game_id'] and self.id == snek['name']):
-                snake = snek    # isolate just our snake from all the snakes
+                snake = np.copy(snek)    # isolate just our snake from all the snakes
         
         
-        localSnakes = np.delete(localSnakes,self.id,0)              # remove our snake from the local snakes (why, IDK?!)
+        #localSnakes = np.delete(localSnakes,self.id,0)              # remove our snake from the local snakes (why, IDK?!)
         self.snakeHead = snake[0]                                   # set the snake head to the first thing in the snake array
         self.currentFrame[self.snakeHead[0],self.snakeHead[1]]=0    # make sure the head is not 1! EXTREMEMLY IMPORTANT
         snake = np.roll(snake,-1,0)     # circular shift, put the head at the back of the array
@@ -251,6 +251,7 @@ def move():
     except Exception as e:
         move = random.choice(['up','down','left','right'])
         taunt = e.message
+        
 
     return {
         'move': move,
