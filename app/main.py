@@ -195,6 +195,7 @@ class Snake(object):
             self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
             if snek['name']=='Vengeful Mittens':
                 snake = snek['coords']    # isolate just our snake from all the snakes
+                allsnakeData = snek
         
         
         self.snakeHead = snake[0]                                   # set the snake head to the first thing in the snake array
@@ -215,7 +216,7 @@ class Snake(object):
             index+=1
          
         points = np.array(self.food.tolist())
-        if(len(points)!=0 and snake['health_points']<50):
+        if(len(points)!=0 and allsnakeData['health_points']<50):
             points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
         else:
             points = np.array([[self.snakeBody[-1,0],self.snakeBody[-1,1]]])
