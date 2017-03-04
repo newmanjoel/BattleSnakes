@@ -21,13 +21,13 @@ class Snake(object):
         self.b = b
         self.c = c
         self.gameID = ''
-        for row in range(self.rows+2):
-            for col in range(self.cols+2):
+        for row in range(self.rows):
+            for col in range(self.cols):
                 self.legendMatrix.append(self.legendString[row]+self.legendString[col])
         self.legendMatrix = np.asarray(self.legendMatrix)
         self.G = nx.Graph()
         self.G.add_nodes_from(self.legendMatrix)
-        self.legendMatrix = self.legendMatrix.reshape((self.rows+2,self.cols+2))
+        self.legendMatrix = self.legendMatrix.reshape((self.rows,self.cols))
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
@@ -39,8 +39,8 @@ class Snake(object):
         return localFrame
     
     def generateWalls(self):
-        output_args = np.ones((self.rows+2,self.cols+2))
-        output_args[1:self.rows+1,1:self.cols+1] = np.zeros((self.rows,self.cols))
+        output_args = np.ones((self.rows,self.cols))
+        output_args[0:self.rows,0:self.cols] = np.zeros((self.rows,self.cols))
         return output_args
     
     def makeDecision(self):
@@ -66,9 +66,9 @@ class Snake(object):
           
     
     def generateDanger(self):
-        self.weights = np.zeros((self.rows+2,self.cols+2))
-        for row in range(1,self.rows+1):
-            for col in range(1,self.cols+1):
+        self.weights = np.zeros((self.rows,self.cols))
+        for row in range(0,self.rows+1):
+            for col in range(0,self.cols):
                 self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
         self.weights = self.weights+self.walls
         
@@ -105,17 +105,7 @@ class Snake(object):
                     except Exception:
                         pass
         
-    def feed(self):
-        self.hunger = 100
-        
-    def getHunger(self):
-        return self.hunger
     
-    def setID(self,newValue):
-        self.id = newValue
-        
-    def getOrignalID(self):
-        return self.orignalID
     
     def dist(self,start,finish):
         deltaX = np.linalg.norm([start[0],finish[0]])
