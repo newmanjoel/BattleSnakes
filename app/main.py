@@ -253,8 +253,8 @@ def move():
         
 
     return {
-        'move': 'right',
-        'taunt': 'this is a test'
+        'move': move,
+        'taunt': taunt
     }
 
 
