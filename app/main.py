@@ -51,22 +51,22 @@ class Snake(object):
                 return 'down'
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
-                    return 'down'#was up
+                    return 'up'#was up
             except Exception as e:
                 pass
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0]-1,self.snakeHead[1]]):
-                    return 'up'#was down
+                    return 'down'#was down
             except Exception as e:
                 pass
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]+1]):
-                    return 'left'#was right
+                    return 'right'#was right
             except Exception as e:
                 pass
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0],self.snakeHead[1]-1]):
-                    return 'right'#was left
+                    return 'left'#was left
             except Exception as e:
                 pass
         except Exception as e:
