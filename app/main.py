@@ -31,12 +31,10 @@ class Snake(object):
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
-        try:
-            for snake in range(len(toAdd)):
-                for i in range(len(toAdd[snake])):
-                    localFrame[toAdd[snake][i][0],toAdd[snake][i][1]] = 1
-        except Exception as e:
-            pass
+        
+        for coords in range(len(toAdd)):
+            localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
+        
         #localFrame
         return localFrame
     
@@ -235,7 +233,7 @@ def start():
     #    bottle.request.urlparts.netloc
     #)
     return {
-        'color': '#00ffff',
+        'color': '#00ff00',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
         'head_url': 'fang',
         'name': 'Vengeful Mittens'
