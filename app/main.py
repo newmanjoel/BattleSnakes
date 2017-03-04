@@ -81,7 +81,10 @@ class Snake(object):
         self.weights = np.zeros((self.rows,self.cols))
         for row in range(0,self.rows):
             for col in range(0,self.cols):
-                self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
+                try:
+                    self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
+                except Exception as e:
+                    pass
         self.weights = self.weights+self.walls
         
     def generateMoveset(self):
@@ -142,7 +145,7 @@ class Snake(object):
         self.a = self.hunger/100.0
         self.b = self.hunger/100.0
         localSnakes = data['snakes']   # make sure we dont change the orignal
-        self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
+        #self.currentFrame = self.addBarriers(self.walls,[[0,0]])     #add all of the snakes to the current frame
         
         #self.currentFrame = self.addBarriers(self.currentFrame,snek['coords'])
         for snek in localSnakes:
