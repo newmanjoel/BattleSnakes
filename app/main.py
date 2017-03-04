@@ -213,8 +213,23 @@ class Snake(object):
                 finally:
                     return False #if it reaches this it has killed itself, dont do it
 
+    def checkFood(self,points):
+        itemsToRemove =[]
+        for snek in data['snakes']:
+            if(snek['name']!='Vengeful Mittens'):
+                body = snek['coords']
+                head = body[0]
+                for point in range(len(points)):
+                    try:
+                        dx = point[0]-head[0]
+                        dy = point[1]-head[1]
+                        temp = pow(pow(dx,2)+pow(dy,2),0.5)
+                        if(temp==1):
+                            itemsToRemove.append(point)
+        return np.delete(points,itemsToRemove,axis=0)
+            
     def turn(self,data):
-	
+        self.alldata = data
         #wallBoard = self.generateSnakeWalls(data['turn'],data['snakes'])
         
         unsortedFood = np.copy(data['food'])
@@ -249,6 +264,7 @@ class Snake(object):
             index+=1
          
         points = np.array(self.food.tolist())
+        point = self.checkFood(points)
         if(len(points)!=0):
             points = np.append(points,[[self.snakeBody[-1,0],self.snakeBody[-1,1]]],0)
         else:
