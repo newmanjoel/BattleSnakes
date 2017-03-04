@@ -12,7 +12,7 @@ class Snake(object):
         self.n = row
         self.rows = row
         self.cols = col
-        self.walls = self.generateWalls()
+        #self.walls = self.generateWalls()
         self.id = unique
         self.method = method
         self.name = newName
@@ -95,7 +95,7 @@ class Snake(object):
                     self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
                 except Exception as e:
                     pass
-        self.weights = self.weights+self.walls
+        self.weights = self.weights#+self.walls
         
     def generateMoveset(self):
         for row in range(self.rows):
