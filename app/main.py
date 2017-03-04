@@ -172,7 +172,7 @@ class Snake(object):
             self.food[index]=unsortedFood[maxFood]
             unsortedFood = np.delete(unsortedFood,maxFood,0)
             index+=1
-        
+         
         points = np.array(self.food.tolist())
         if(len(points)!=0):
             points = np.append(points,[[snakeBody[-1,0],snakeBody[-1,1]]],0)
