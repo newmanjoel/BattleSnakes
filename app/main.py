@@ -38,8 +38,8 @@ class Snake(object):
         return localFrame
     
     def generateWalls(self):
-        output_args = np.ones((self.n+2,self.n+2))
-        output_args[1:self.n+1,1:self.n+1] = np.zeros((self.n,self.n))
+        output_args = np.ones((self.rows+2,self.cols+2))
+        output_args[1:self.rows+1,1:self.cols+1] = np.zeros((self.rows,self.cols))
         return output_args
     
     def makeDecision(self):
@@ -65,15 +65,15 @@ class Snake(object):
           
     
     def generateDanger(self):
-        self.weights = np.zeros((self.n+2,self.n+2))
-        for row in range(1,self.n+1):
-            for col in range(1,self.n+1):
+        self.weights = np.zeros((self.rows+2,self.cols+2))
+        for row in range(1,self.rows+1):
+            for col in range(1,self.cols+1):
                 self.weights[row,col] = self.currentFrame[row,col]*self.b+self.c + self.currentFrame[row+1,col]*self.b+self.currentFrame[row-1,col]*self.b+self.currentFrame[row,col+1]*self.b+self.currentFrame[row,col-1]*self.b
         self.weights = self.weights+self.walls
         
     def generateMoveset(self):
-        for row in range(1,self.n+1):
-            for col in range (1,self.n+1):
+        for row in range(1,self.rows+1):
+            for col in range (1,self.cols+1):
                 
                 if(self.currentFrame[row,col]==0 and self.currentFrame[row+1,col]==0):
                     self.G.add_edge(self.legendMatrix[row,col],self.legendMatrix[row+1,col], weight = (self.weights[row,col]*self.a + self.weights[row+1,col]*self.b))
