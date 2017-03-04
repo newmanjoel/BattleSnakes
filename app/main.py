@@ -34,7 +34,7 @@ class Snake(object):
         
         for coords in range(len(toAdd)):
             if(coords==0):
-                localFrame[toAdd[coords][0],toAdd[coords][1]] = 100
+                localFrame[toAdd[coords][0],toAdd[coords][1]] = 5
             else:
                 localFrame[toAdd[coords][0],toAdd[coords][1]] = 1
         
