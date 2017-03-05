@@ -6,7 +6,7 @@ import random
 
 
 class Snake(object):
-    def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.7,b = 0.7,c = 0.1):
+    def __init__(self,newName,row,col,unique=1,method = 'a_star',a = 0.7,b = 0.7,c = 0.01):
         self.legendString = '~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURTUVWXYZ!@#$%^&*()_+<>?:"{}|\][/.,'
         self.legendMatrix = []
         self.n = row
