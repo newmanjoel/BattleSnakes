@@ -28,31 +28,8 @@ class Snake(object):
         self.G = nx.Graph()
         self.G.add_nodes_from(self.legendMatrix)
         self.legendMatrix = self.legendMatrix.reshape((self.rows,self.cols))
-    def tauntgenerator(self):
-        taunts = ['Teen Titans, Go!','Garbage chute. Really wonderful idea. What a wonderful smell you’ve discovered!',
-                  'Snake? Snake!? SNAAAAAAAAAAAAKE!',
-                    'Tis but a flesh wound…',
-                    'We’re no strangers to love',
-                    'You know the rules and so do I',
-                    'A full commitments what Im thinking of',
-                    'You wouldnt get this from any other guy',
-                    '“Snakes. Why did it have to be snakes?',
-                    'I AM the Brute Squad',
-                    'If she weighs the same as a duck, she’s made of wood',
-                    '“The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men…',
-                    '“...Blessed is he, who in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother’s keeper and the finder of lost children…',
-                    '“...And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy my brothers.',
-                    'My anconda don’t want none',
-                    'And Saint Attila raised the hand grenade up on high, saying,',
-                    '"O Lord, bless this Thy hand grenade that, with it, Thou mayest blow Thine enemies to tiny bits in Thy mercy.',
-                    'And the Lord did grin, and the people did feast upon the lambs and sloths and carp and anchovies and orangutans and breakfast cereals and fruit bats and large chu--',
-                    'Skip a bit, Brother',
-                    'And the Lord spake, saying, First shalt thou take out the Holy Pin. Then, shalt thou count to three. No more. No less. ',
-                    'Three shalt be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, nor either count thou two, excepting that thou then proceed to three. ',
-                    'Five is right out. Once the number three, being the third number, be reached, then, lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in My sight, shall snuff it.',
-                    'Right!',
-                    'One!... Two!... Five!']
-        return random.choice(taunts)
+    
+        
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
@@ -455,10 +432,33 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json 
+    taunts = ['Teen Titans, Go!','Garbage chute. Really wonderful idea. What a wonderful smell you’ve discovered!',
+                  'Snake? Snake!? SNAAAAAAAAAAAAKE!',
+                    'Tis but a flesh wound…',
+                    'We’re no strangers to love',
+                    'You know the rules and so do I',
+                    'A full commitments what Im thinking of',
+                    'You wouldnt get this from any other guy',
+                    '“Snakes. Why did it have to be snakes?',
+                    'I AM the Brute Squad',
+                    'If she weighs the same as a duck, she’s made of wood',
+                    '“The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men…',
+                    '“...Blessed is he, who in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother’s keeper and the finder of lost children…',
+                    '“...And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy my brothers.',
+                    'My anconda don’t want none',
+                    'And Saint Attila raised the hand grenade up on high, saying,',
+                    '"O Lord, bless this Thy hand grenade that, with it, Thou mayest blow Thine enemies to tiny bits in Thy mercy.',
+                    'And the Lord did grin, and the people did feast upon the lambs and sloths and carp and anchovies and orangutans and breakfast cereals and fruit bats and large chu--',
+                    'Skip a bit, Brother',
+                    'And the Lord spake, saying, First shalt thou take out the Holy Pin. Then, shalt thou count to three. No more. No less. ',
+                    'Three shalt be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, nor either count thou two, excepting that thou then proceed to three. ',
+                    'Five is right out. Once the number three, being the third number, be reached, then, lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in My sight, shall snuff it.',
+                    'Right!',
+                    'One!... Two!... Five!']
     try:
         snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
-        taunt = snek.tauntgenerator()
+        taunt = random.choice(taunts)
     except Exception as e:
         move = random.choice(['up','down','left','right'])
         taunt = e.message
