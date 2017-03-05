@@ -177,7 +177,7 @@ class Snake(object):
                     return (row,col)
 
     def kom(self,path):
-        localG=  self.G
+        localG=  self.G.copy()
         if(path!=''):
             (endingrow,endingcol) = self.lookup(path[-1])
             for node in path:
