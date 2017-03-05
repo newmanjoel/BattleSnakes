@@ -52,7 +52,7 @@ class Snake(object):
                     'Five is right out. Once the number three, being the third number, be reached, then, lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in My sight, shall snuff it.',
                     'Right!',
                     'One!... Two!... Five!']
-        return taunts[self.alldata['turn']%len(taunts)]
+        return random.choice(taunts)
 
     def addBarriers(self,beforeFrame,toAdd):
         localFrame = np.copy(beforeFrame)
