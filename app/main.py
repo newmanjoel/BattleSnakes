@@ -433,7 +433,6 @@ def start():
 def move():
     data = bottle.request.json 
    
-    #taunts = ['Teen Titans, Go!','“Garbage chute. Really wonderful idea. What a wonderful smell you’ve discovered!”','Snake? Snake!? SNAAAAAAAAAAAAKE!','Tis but a flesh wound…','We’re no strangers to love','You know the rules and so do I','A full commitments what Im thinking of','You wouldnt get this from any other guy','“Snakes. Why did it have to be snakes?”','I AM the Brute Squad']
     try:
         snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
