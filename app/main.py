@@ -240,6 +240,10 @@ class Snake(object):
                         temp22 = 0
                         temp23 = 0
                         temp24 = 0
+                        temp31 = 0
+                        temp32 = 0
+                        temp33 = 0
+                        temp34 = 0
                         try:
                             temp21 = self.currentFrame[point[0],point[1]+1]
                         except Exception as e:
@@ -256,8 +260,25 @@ class Snake(object):
                             temp24 = self.currentFrame[point[0]-1,point[1]]
                         except Exception as e:
                             pass
+                        try:
+                            temp31 = self.currentFrame[point[0],point[1]+2]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp32 = self.currentFrame[point[0],point[1]-2]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp33 = self.currentFrame[point[0]-2,point[1]]
+                        except Exception as e:
+                            pass
+                        try:
+                            temp34 = self.currentFrame[point[0]-2,point[1]]
+                        except Exception as e:
+                            pass
                         temp2 = temp21+temp22+temp23+temp24
-                        if(temp<5 and temp2==3):
+                        temp3 = temp31+temp32+temp33+temp34
+                        if(temp<5 and temp2+temp3<3):
                             itemsToRemove.append(point)
                     except Exception as e:
                         pass
