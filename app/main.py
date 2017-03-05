@@ -432,7 +432,6 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json 
-   
     try:
         snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
