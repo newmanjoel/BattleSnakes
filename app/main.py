@@ -54,10 +54,28 @@ class Snake(object):
     
     def makeDecision(self):
         try:
-            if(self.path==''):
-                return 'up'
-            if(len(self.path)==1):
-                return 'left'
+            
+            if(len(self.path)==1 or self.path==''):
+                try:
+                    if(self.currentFrame[self.snakeHead[0]+1,self.snakeHead[1]]==0):
+                        return 'right'
+                except Exception as e:
+                    pass
+                try:
+                    if(self.currentFrame[self.snakeHead[0]-1,self.snakeHead[1]]==0):
+                        return 'left'
+                except Exception as e:
+                    pass
+                try:
+                    if(self.currentFrame[self.snakeHead[0],self.snakeHead[1]+1]==0):
+                        return 'down'
+                except Exception as e:
+                    pass
+                try:
+                    if(self.currentFrame[self.snakeHead[0],self.snakeHead[1]-1]==0):
+                        return 'up'
+                except Exception as e:
+                    pass
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
                     return 'right'#was up
