@@ -316,20 +316,13 @@ class Snake(object):
             if self.method == 'a_star':
                 try:
                     self.path =  nx.astar_path(self.G,self.legendMatrix[self.snakeHead[0],self.snakeHead[1]],self.legendMatrix[point[0],point[1]])
-                    if(self.kom(self.path)):
-                        return self.makeDecision()
-                    break
-                except Exception as e:
-                    #print self.name + '-> Tail Exception: '+ e.message
-                    pass
-            if self.method =='dijkstra_path':
-                try:
-                    self.path =  nx.dijkstra_path(self.G,self.legendMatrix[self.snakeHead[0],self.snakeHead[1]],self.legendMatrix[point[0],point[1]])
+                    #if(self.kom(self.path)):
                     return self.makeDecision()
                     break
                 except Exception as e:
                     #print self.name + '-> Tail Exception: '+ e.message
                     pass
+
         # if I am here, i have not made a decision
         for row in range(self.rows):
             for col in range(self.cols):
