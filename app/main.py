@@ -435,7 +435,7 @@ def move():
     try:
         snek = Snake(data['game_id'],data['width'],data['height'])
         move = snek.turn(data)
-        taunt = 'Tis but a flesh wound…'
+        taunt = 'tis but a flesh wound...'
     except Exception as e:
         move = random.choice(['up','down','left','right'])
         taunt = e.message
