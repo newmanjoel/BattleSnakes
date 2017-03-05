@@ -330,6 +330,17 @@ class Snake(object):
                 except Exception as e:
                     #print self.name + '-> Tail Exception: '+ e.message
                     pass
+        # if I am here, i have not made a decision
+        for row in self.rows:
+            for col in self.cols:
+                try:
+                    self.path =  nx.astar_path(self.G,self.legendMatrix[self.snakeHead[0],self.snakeHead[1]],self.legendMatrix[row,col])
+                    return self.makeDecision()
+                    break
+                except Exception as e:
+                    #print self.name + '-> Tail Exception: '+ e.message
+                    pass
+                    
         return self.makeDecision()
       
 
