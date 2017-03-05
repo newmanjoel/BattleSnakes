@@ -257,7 +257,7 @@ class Snake(object):
                         except Exception as e:
                             pass
                         temp2 = temp21+temp22+temp23+temp24
-                        if(temp<3 and temp2==3):
+                        if(temp<5 and temp2==3):
                             itemsToRemove.append(point)
                     except Exception as e:
                         pass
