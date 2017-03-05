@@ -41,16 +41,7 @@ class Snake(object):
         #localFrame
         return localFrame
 	
-	
-				
-		
-			
-    '''
-    def generateWalls(self):
-        output_args = np.ones((self.rows,self.cols))
-        output_args[0:self.rows,0:self.cols] = np.zeros((self.rows,self.cols))
-        return output_args
-	'''
+
     
     def makeDecision(self):
         try:
@@ -234,6 +225,22 @@ class Snake(object):
     
     def checkFood(self,points):
         itemsToRemove =[]
+        numOfSnakes = 0
+        myLength = 0
+        theirLength = 0
+        flag = True
+        numofSnakes = len(self.alldata['snakes'])
+        if(numofSnakes==2):
+            for snek in self.alldata['snakes']:
+                if(snek['name']=='Vengeful Mittens'):
+                    myLength = len(snek['coords'])
+                else:
+                    theirLength = len(snek['coods'])
+            flag = myLength>theirLength
+        
+        
+        
+            
         for snek in self.alldata['snakes']:
             body = snek['coords']
             head = body[0]
@@ -243,7 +250,7 @@ class Snake(object):
                         dx = point[0]-head[0]
                         dy = point[1]-head[1]
                         temp = pow(pow(dx,2)+pow(dy,2),0.5)
-                        if(temp==1):
+                        if(temp==1 and flag):
                             itemsToRemove.append(point)
                             
                     except Exception as e:
