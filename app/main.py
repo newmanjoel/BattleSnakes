@@ -235,7 +235,7 @@ class Snake(object):
                 if(snek['name']=='Vengeful Mittens'):
                     myLength = len(snek['coords'])
                 else:
-                    theirLength = len(snek['coods'])
+                    theirLength = len(snek['coords'])
             flag = myLength>theirLength
         
         
