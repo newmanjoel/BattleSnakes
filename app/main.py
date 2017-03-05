@@ -225,7 +225,7 @@ class Snake(object):
     
     def checkFood(self,points):
         itemsToRemove =[]
-        numOfSnakes = 0
+        numofSnakes = 0
         myLength = 0
         theirLength = 0
         flag = True
@@ -236,7 +236,7 @@ class Snake(object):
                     myLength = len(snek['coords'])
                 else:
                     theirLength = len(snek['coords'])
-            flag = myLength>theirLength
+            flag = myLength<theirLength
         
         
         
