@@ -57,7 +57,7 @@ class Snake(object):
             if(self.path==''):
                 return 'up'
             if(len(self.path)==1):
-                return 'down'
+                return 'left'
             try:
                 if(self.path[1]==self.legendMatrix[self.snakeHead[0]+1,self.snakeHead[1]]):
                     return 'right'#was up
