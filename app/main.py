@@ -3,6 +3,7 @@ import os
 import networkx as nx
 import numpy as np
 import random
+import logging
 
 
 
@@ -13,12 +14,6 @@ def static(path):
 
 @bottle.get('/')
 def index():
-    #head_url = '%s://%s/static/head.png' % (
-    #    bottle.request.urlparts.scheme,
-    #    bottle.request.urlparts.netloc
-    #)
-    
-    
     return {
         'color': '#ffffff',
         'head': 'fang'
@@ -31,19 +26,10 @@ def start():
     game_id = data['game_id']
     board_width = data['width']
     board_height = data['height']
-    
-    
-    
-
-    #head_url = '%s://%s/static/head.png' % (
-    #    bottle.request.urlparts.scheme,
-    #    bottle.request.urlparts.netloc
-    #)
     return {
-        'color': '#00ff00',
-        'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
-        'head_url': 'fang',
-        'name': 'Vengeful Mittens'
+        "color": "#ff00ff",
+        "headType": "bendr",
+        "tailType": "pixel"
     }
 
 
@@ -52,32 +38,31 @@ def start():
 def move():
     data = bottle.request.json 
     try:
-        snek = Snake(data['game_id'],data['width'],data['height'])
-        move = snek.turn(data)
-        taunt = 'tis but a flesh wound...'
+        raise Exception("This is a general exception")
     except Exception as e:
         move = random.choice(['up','down','left','right'])
         taunt = e.message
-        
-
     return {
-        'move': move,
-        'taunt': taunt
+        'move': move
     }
+
+@bottle.post('/ping')
+def ping():
+    return 200
 
 
 @bottle.post('/end')
 def end():
     data = bottle.request.json
-
     # TODO: Do things with data
-
     return {
-        'taunt': 'battlesnake-python!'
+        200
     }
+
 
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
     bottle.run(application, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
