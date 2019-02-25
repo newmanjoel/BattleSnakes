@@ -1,71 +1,86 @@
-import bottle
+import json
 import os
-import networkx as nx
-import numpy as np
 import random
-import logging
+import bottle
 
+from api import ping_response, start_response, move_response, end_response
 
+@bottle.route('/')
+def index():
+    return '''
+    Battlesnake documentation can be found at
+       <a href="https://docs.battlesnake.io">https://docs.battlesnake.io</a>.
+    '''
 
 @bottle.route('/static/<path:path>')
 def static(path):
+    """
+    Given a path, return the static file located relative
+    to the static folder.
+
+    This can be used to return the snake head URL in an API response.
+    """
     return bottle.static_file(path, root='static/')
 
-
-@bottle.get('/')
-def index():
-    return {
-        'color': '#ffffff',
-        'head': 'fang'
-    }
-
+@bottle.post('/ping')
+def ping():
+    """
+    A keep-alive endpoint used to prevent cloud application platforms,
+    such as Heroku, from sleeping the application instance.
+    """
+    return ping_response()
 
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-    game_id = data['game_id']
-    board_width = data['width']
-    board_height = data['height']
-    return {
-        "color": "#ff00ff",
-        "headType": "bendr",
-        "tailType": "pixel"
-    }
 
+    """
+    TODO: If you intend to have a stateful snake AI,
+            initialize your snake state here using the
+            request's data if necessary.
+    """
+    print(json.dumps(data))
+
+    color = "#00FF00"
+
+    return start_response(color)
 
 
 @bottle.post('/move')
 def move():
-    data = bottle.request.json 
-    try:
-        raise Exception("This is a general exception")
-    except Exception as e:
-        move = random.choice(['up','down','left','right'])
-        taunt = e.message
-    return {
-        'move': move
-    }
+    data = bottle.request.json
 
-@bottle.post('/')
-@bottle.post('/ping')
-def ping():
-    return {
-            'response':200
-            }
+    """
+    TODO: Using the data from the endpoint request object, your
+            snake AI must choose a direction to move in.
+    """
+    print(json.dumps(data))
+
+    directions = ['up', 'down', 'left', 'right']
+    direction = random.choice(directions)
+
+    return move_response(direction)
 
 
 @bottle.post('/end')
 def end():
     data = bottle.request.json
-    # TODO: Do things with data
-    return {
-        'response':200
-    }
 
+    """
+    TODO: If your snake AI was stateful,
+        clean up any stateful objects here.
+    """
+    print(json.dumps(data))
 
+    return end_response()
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
+
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
-    bottle.run(application, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
+    bottle.run(
+        application,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=os.getenv('PORT', '8080'),
+        debug=os.getenv('DEBUG', True)
+    )
