@@ -46,9 +46,12 @@ def move():
         'move': move
     }
 
+@bottle.post('/')
 @bottle.post('/ping')
 def ping():
-    return 200
+    return {
+            'response':200
+            }
 
 
 @bottle.post('/end')
@@ -56,7 +59,7 @@ def end():
     data = bottle.request.json
     # TODO: Do things with data
     return {
-        200
+        'response':200
     }
 
 
