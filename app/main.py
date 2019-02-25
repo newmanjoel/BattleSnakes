@@ -2,6 +2,8 @@ import json
 import os
 import random
 import bottle
+import logging
+from snake_logic import Game, Snake, Board
 
 from api import ping_response, start_response, move_response, end_response
 
@@ -39,8 +41,10 @@ def start():
             initialize your snake state here using the
             request's data if necessary.
     """
-    print(json.dumps(data))
-
+    #print(json.dumps(data))
+    logging.debug("Start: {}".format(data))
+    
+    
     color = "#00FF00"
 
     return start_response(color)
@@ -54,7 +58,8 @@ def move():
     TODO: Using the data from the endpoint request object, your
             snake AI must choose a direction to move in.
     """
-    print(json.dumps(data))
+    #print(json.dumps(data))
+    logging.debug("Move: {}".format(data))
 
     directions = ['up', 'down', 'left', 'right']
     direction = random.choice(directions)
@@ -70,7 +75,9 @@ def end():
     TODO: If your snake AI was stateful,
         clean up any stateful objects here.
     """
-    print(json.dumps(data))
+    
+    logging.debug("End: {}".format(data))
+    #print(json.dumps(data))
 
     return end_response()
 
@@ -78,6 +85,8 @@ def end():
 application = bottle.default_app()
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+    game = Game()
     bottle.run(
         application,
         host=os.getenv('IP', '0.0.0.0'),
