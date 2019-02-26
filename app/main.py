@@ -3,7 +3,7 @@ import os
 import random
 import bottle
 import logging
-from snake_logic import Game, Snake, Board
+from snake_logic import Game, Snake, Board, TD
 
 from api import ping_response, start_response, move_response, end_response
 
@@ -41,8 +41,9 @@ def start():
             initialize your snake state here using the
             request's data if necessary.
     """
-    print("Start: {}".format(data))
+    #print("Start: {}".format(data))
     logging.debug("Start: {}".format(data))
+    game = Game(data)
     
     
     color = "#00FF00"
@@ -59,8 +60,11 @@ def move():
             snake AI must choose a direction to move in.
     """
     #print(json.dumps(data))
-    print("Move: {}".format(data))
+    #print("Move: {}".format(data))
     logging.debug("Move: {}".format(data))
+    game.load_data(data)
+    logging.info("Snake: {}".format(game.board.snakes[0]))
+    
 
     directions = ['up', 'down', 'left', 'right']
     direction = random.choice(directions)
@@ -76,7 +80,7 @@ def end():
     TODO: If your snake AI was stateful,
         clean up any stateful objects here.
     """
-    print("End: {}".format(data))
+    #print("End: {}".format(data))
     logging.debug("End: {}".format(data))
     #print(json.dumps(data))
 
@@ -85,9 +89,11 @@ def end():
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 
+
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
-    game = Game()
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+    td = TD()
+    game = Game(json.loads(td.start))
     bottle.run(
         application,
         host=os.getenv('IP', '0.0.0.0'),
