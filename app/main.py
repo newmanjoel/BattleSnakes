@@ -53,6 +53,7 @@ def start():
 
 @bottle.post('/move')
 def move():
+    global empty_game
     data = bottle.request.json
 
     """
@@ -62,6 +63,7 @@ def move():
     #print(json.dumps(data))
     #print("Move: {}".format(data))
     logging.debug("Move: {}".format(data))
+    game = empty_game
     game.load_data(data)
     logging.info("Snake: {}".format(game.board.snakes[0]))
     
@@ -93,7 +95,7 @@ application = bottle.default_app()
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
     td = TD()
-    game = Game(json.loads(td.start))
+    empty_game = Game(json.loads(td.start))
     bottle.run(
         application,
         host=os.getenv('IP', '0.0.0.0'),

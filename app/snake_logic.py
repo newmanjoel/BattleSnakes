@@ -87,7 +87,10 @@ class Snake():
                 self.body.append(Body(link))
     
     def __str__(self):
-        return "Snake Data: {} | {} | {} {}".format(self.name, self.health, self.head, self.body)
+        body_data = ""
+        for link in self.body:
+            body_data = body_data + " " + link
+        return "Snake Data: {} | {} | {} {}".format(self.name, self.health, self.head, body_data)
             
 class Point():
     def __init__(self):
