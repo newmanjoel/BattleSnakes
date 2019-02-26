@@ -274,7 +274,7 @@ class TD:
     ]
   }
 }
-        """
+"""
 
         self.start = json.loads(self.start)
         
