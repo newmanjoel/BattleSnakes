@@ -89,7 +89,7 @@ class Snake():
     def __str__(self):
         body_data = ""
         for link in self.body:
-            body_data = body_data + " " + link
+            body_data = body_data + " " + str(link)
         return "Snake Data: {} | {} | {} {}".format(self.name, self.health, self.head, body_data)
             
 class Point():
