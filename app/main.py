@@ -8,7 +8,7 @@ from snake_logic import Game, Snake, Board, TD
 from api import ping_response, start_response, move_response, end_response
 logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 td = TD()
-empty_game = Game(json.loads(td.start))
+empty_game = Game(td.start)
     
 @bottle.route('/')
 def index():
