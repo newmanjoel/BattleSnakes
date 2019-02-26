@@ -25,7 +25,31 @@ class Game():
         self.turn = int(play_state["turn"])
         self.board.load_data(play_state["board"])
         self.my_snake = play_state["you"]["id"]
+    
+    def legal_moves(self):
+        head = (self.board.ms.head.x, self.board.ms.head.y)
+        nodes = list(nx.neighbors(self.board.board, head))
+        logging.info("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
         
+        #directions = ['up', 'down', 'left', 'right']
+        legal_direction = []
+        for node in nodes:
+            # node contains 2 elements
+            x_diff = head[0] - node[0] # x value
+            y_diff = head[1] - node[1] # y value
+            
+            if x_diff > 0:
+                legal_direction.append('right')
+            elif x_diff < 0:
+                legal_direction.append('left')
+            elif y_diff > 0:
+                legal_direction.append('down')
+            elif y_diff < 0:
+                legal_direction.append('up')
+            else:
+                logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
+                        nodes, node, x_diff, y_diff))
+        return legal_direction
     
 
 class Board():
@@ -36,6 +60,7 @@ class Board():
         self.food = []
         self.snakes = []
         self.distances = {}
+        self.ms = None
         self.board = nx.grid_2d_graph(self.height, self.width)
         self.load_data(play_state)
         logging.info("board created with playspace of {},{}".format(self.height, self.width))
@@ -96,18 +121,18 @@ class Board():
         Calculate how much the snake or food should push or pull the our snake
         '''
         mann_dist = []
-        sn = None
+        self.ms = None
         for snake in self.snakes:
             if snake.id == snake_id:
-                sn = snake
+                self.ms = snake
                 break
         
         for snake in self.snakes:
             if snake.id != snake_id:
-                mann_dist.append(sn.head*snake.head)
+                mann_dist.append(self.ms.head*snake.head)
         
         for food in self.food:
-            mann_dist.append(sn.head*food)
+            mann_dist.append(self.ms.head*food)
         
         return mann_dist
         

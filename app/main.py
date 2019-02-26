@@ -6,7 +6,7 @@ import logging
 from snake_logic import Game, Snake, Board, TD
 
 from api import ping_response, start_response, move_response, end_response
-logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
 td = TD()
 empty_game = Game(td.start)
     
@@ -37,7 +37,6 @@ def ping():
 
 @bottle.post('/start')
 def start():
-    global empty_game
     data = bottle.request.json
 
     """
@@ -47,9 +46,6 @@ def start():
     """
     #print("Start: {}".format(data))
     logging.debug("Start: {}".format(data))
-    game = empty_game
-    game = Game(data)
-    
     
     color = "#00FF00"
 
@@ -58,22 +54,24 @@ def start():
 
 @bottle.post('/move')
 def move():
+    global empty_game
     data = bottle.request.json
 
     """
     TODO: Using the data from the endpoint request object, your
             snake AI must choose a direction to move in.
     """
-    #print(json.dumps(data))
-    #print("Move: {}".format(data))
+
     logging.debug("Move: {}".format(data))
     game = Game(data)
     logging.info(game.board.calc_vectors(game.my_snake))
     
     logging.info(repr(game.board))
+    empty_game = game
+    directions = game.legal_moves()
     
 
-    directions = ['up', 'down', 'left', 'right']
+    #directions = ['up', 'down', 'left', 'right']
     direction = random.choice(directions)
 
     return move_response(direction)
@@ -88,7 +86,7 @@ def end():
         clean up any stateful objects here.
     """
     #print("End: {}".format(data))
-    logging.debug("End: {}".format(data))
+    #logging.debug("End: {}".format(data))
     #print(json.dumps(data))
 
     return end_response()
@@ -104,3 +102,4 @@ if __name__ == '__main__':
         port=os.getenv('PORT', '8080'),
         debug=os.getenv('DEBUG', True)
     )
+    logging.info("shutting down application")
