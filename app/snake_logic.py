@@ -34,6 +34,20 @@ class Board():
         self.board = nx.grid_2d_graph(self.height, self.width)
         logging.info("board created with playspace of {},{}".format(self.height, self.width))
     
+    def __repr__(self):
+        text = ""
+        text += "Snakes:\n"
+        for snake in self.snakes():
+            text += "\t{}\n".format(str(snake))
+        text += "Food:\n"
+        for food in self.food():
+            text += "\t{}\n".format(str(food))
+        return text
+    
+    def __str__(self):
+        return self.__repr()
+        
+    
     def load_data(self, play_state):
         ''' 
         Used to load the data into the board from the json data provided
@@ -87,17 +101,25 @@ class Snake():
                 self.body.append(Body(link))
     
     def __str__(self):
+        return "{} | {} | {} {}".format(self.name, self.health, self.head, self.bodies())
+    
+    def bodies(self):
         body_data = ""
         for link in self.body:
             body_data = body_data + " " + str(link)
-        return "{} | {} | {} {}".format(self.name, self.health, self.head, body_data)
-            
+        return body_data
+        
 class Point():
     def __init__(self):
         self.x = -1
         self.y = -1
+        
     def __str__(self):
         return "({},{})".format(self.x, self.y)
+    
+    def __repr__(self):
+        return "({},{})".format(self.x, self.y)
+
     
 class Body(Point):
     def __init__(self, body_info):

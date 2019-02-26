@@ -58,7 +58,6 @@ def start():
 
 @bottle.post('/move')
 def move():
-    global empty_game
     data = bottle.request.json
 
     """
@@ -68,12 +67,9 @@ def move():
     #print(json.dumps(data))
     #print("Move: {}".format(data))
     logging.debug("Move: {}".format(data))
-    game = empty_game
-    game.load_data(data)
-    for snake in game.board.snakes:
-        logging.info("Snake: {}".format(snake))
-        
-    logging.info("Food: {}".format(" ".join(game.board.food)))
+    game = Game(data)
+    
+    logging.info(repr(game.board))
     
 
     directions = ['up', 'down', 'left', 'right']
