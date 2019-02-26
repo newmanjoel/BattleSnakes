@@ -7,19 +7,24 @@ Created on Mon Feb 25 15:08:30 2019
 """
 
 import networkx as nx
+import json
 import logging
+import cmath
+import math
 
 class Game():
     def __init__(self, play_state):
         self.id = play_state["game"]["id"]
         self.turn = int(play_state["turn"])
         self.board = Board(play_state["board"])
+        self.my_snake = play_state["you"]["id"]
     
     def load_data(self, play_state):
         if self.id == play_state["game"]["id"]:
             logging.info("Loading Data into the wrong game")
         self.turn = int(play_state["turn"])
         self.board.load_data(play_state["board"])
+        self.my_snake = play_state["you"]["id"]
         
     
 
@@ -86,6 +91,28 @@ class Board():
         '''
         self.distances = dict(nx.all_pairs_shortest_path_length(self.board))
             
+    def calc_vectors(self, snake_id):
+        '''
+        Calculate how much the snake or food should push or pull the our snake
+        '''
+        mann_dist = []
+        sn = None
+        for snake in self.snakes:
+            if snake.id == snake_id:
+                sn = snake
+                break
+        
+        for snake in self.snakes:
+            if snake.id != snake_id:
+                mann_dist.append(-sn.head*snake.head)
+        
+        for food in self.food:
+            mann_dist.append(sn.head*food)
+        
+        return mann_dist
+        
+        
+        
 
 class Snake():
     def __init__(self, snake_info):
@@ -111,21 +138,36 @@ class Snake():
         return body_data
         
 class Point():
-    def __init__(self):
-        self.x = -1
-        self.y = -1
+    def __init__(self, lx = -1, ly = -1):
+        self.x = lx
+        self.y = ly
         
     def __str__(self):
         return "({},{})".format(self.x, self.y)
     
     def __repr__(self):
         return "({},{})".format(self.x, self.y)
-
+    
+    def __getitem__(self, index):
+        return [self.x, self.y]
+    
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+    
+    def __abs__(self):
+        return (self.x * self.x + self.y * self.y)**0.5
+    
+    def __mul__(self, other):
+        z = complex(self.x, self.y)
+        y = complex(other.x, other.y)
+        return z-y
+    
     
 class Body(Point):
     def __init__(self, body_info):
         self.x = int(body_info["x"])
         self.y = int(body_info["y"])
+        
 
 class Food(Point):
     def __init__(self, food_info):
@@ -232,4 +274,7 @@ class TD:
     ]
   }
 }
-"""
+        """
+
+        self.start = json.loads(self.start)
+        

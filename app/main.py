@@ -68,6 +68,7 @@ def move():
     #print("Move: {}".format(data))
     logging.debug("Move: {}".format(data))
     game = Game(data)
+    logging.info(game.board.calc_vectors(game.my_snake))
     
     logging.info(repr(game.board))
     
