@@ -6,7 +6,10 @@ import logging
 from snake_logic import Game, Snake, Board, TD
 
 from api import ping_response, start_response, move_response, end_response
-
+logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+td = TD()
+empty_game = Game(json.loads(td.start))
+    
 @bottle.route('/')
 def index():
     return '''
@@ -34,6 +37,7 @@ def ping():
 
 @bottle.post('/start')
 def start():
+    global empty_game
     data = bottle.request.json
 
     """
@@ -43,6 +47,7 @@ def start():
     """
     #print("Start: {}".format(data))
     logging.debug("Start: {}".format(data))
+    game = empty_game
     game = Game(data)
     
     
@@ -93,9 +98,6 @@ application = bottle.default_app()
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
-    td = TD()
-    empty_game = Game(json.loads(td.start))
     bottle.run(
         application,
         host=os.getenv('IP', '0.0.0.0'),
