@@ -101,13 +101,11 @@ class Point():
     
 class Body(Point):
     def __init__(self, body_info):
-        super().__init__()
         self.x = int(body_info["x"])
         self.y = int(body_info["y"])
 
 class Food(Point):
     def __init__(self, food_info):
-        super().__init__()
         self.x = int(food_info["x"])
         self.y = int(food_info["y"])
 
