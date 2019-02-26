@@ -48,3 +48,4 @@ Temporary Items
 /Snake/nbproject/private/
 /Snake/build/
 /Snake/dist/
+*.pyc
