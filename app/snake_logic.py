@@ -37,10 +37,10 @@ class Board():
     def __repr__(self):
         text = ""
         text += "Snakes:\n"
-        for snake in self.snakes():
+        for snake in self.snakes:
             text += "\t{}\n".format(str(snake))
         text += "Food:\n"
-        for food in self.food():
+        for food in self.food:
             text += "\t{}\n".format(str(food))
         return text
     
