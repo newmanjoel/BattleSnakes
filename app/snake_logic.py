@@ -32,6 +32,7 @@ class Board():
         self.snakes = []
         self.distances = {}
         self.board = nx.grid_2d_graph(self.height, self.width)
+        self.load_data(play_state)
         logging.info("board created with playspace of {},{}".format(self.height, self.width))
     
     def __repr__(self):
