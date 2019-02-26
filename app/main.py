@@ -70,7 +70,10 @@ def move():
     logging.debug("Move: {}".format(data))
     game = empty_game
     game.load_data(data)
-    logging.info("Snake: {}".format(game.board.snakes[0]))
+    for snake in game.board.snakes:
+        logging.info("Snake: {}".format(snake))
+        
+    logging.info("Food: {}".format(" ".join(game.board.food)))
     
 
     directions = ['up', 'down', 'left', 'right']
