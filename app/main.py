@@ -41,7 +41,7 @@ def start():
             initialize your snake state here using the
             request's data if necessary.
     """
-    #print(json.dumps(data))
+    print("Start: {}".format(data))
     logging.debug("Start: {}".format(data))
     
     
@@ -59,6 +59,7 @@ def move():
             snake AI must choose a direction to move in.
     """
     #print(json.dumps(data))
+    print("Move: {}".format(data))
     logging.debug("Move: {}".format(data))
 
     directions = ['up', 'down', 'left', 'right']
@@ -75,7 +76,7 @@ def end():
     TODO: If your snake AI was stateful,
         clean up any stateful objects here.
     """
-    
+    print("End: {}".format(data))
     logging.debug("End: {}".format(data))
     #print(json.dumps(data))
 
