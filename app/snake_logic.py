@@ -104,7 +104,7 @@ class Board():
         
         for snake in self.snakes:
             if snake.id != snake_id:
-                mann_dist.append(-sn.head*snake.head)
+                mann_dist.append(sn.head*snake.head)
         
         for food in self.food:
             mann_dist.append(sn.head*food)
@@ -167,6 +167,13 @@ class Body(Point):
     def __init__(self, body_info):
         self.x = int(body_info["x"])
         self.y = int(body_info["y"])
+    
+    def __mul__(self, other):
+        # I want to overload this to go the other way
+        z = complex(self.x, self.y)
+        y = complex(other.x, other.y)
+        return y-z
+    
         
 
 class Food(Point):
