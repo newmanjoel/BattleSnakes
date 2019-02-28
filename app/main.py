@@ -3,12 +3,23 @@ import os
 import random
 import bottle
 import logging
-from snake_logic import Game, Snake, Board, TD
+from snake_logic import Game, Snake, Board, TD, Prev
 
+import math, cmath
 from api import ping_response, start_response, move_response, end_response
-logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
-td = TD()
-empty_game = Game(td.start)
+logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+
+prev = Prev()
+
+def pretty_print(game, chosen_direction, angle):
+    text = ""
+    text += "W:{}\tH:{}\tT:{}\n".format(game.board.width, game.board.height, game.turn)
+    text += "{}".format(game.stored_legal_direction) +" {} {}\n".format(chosen_direction, angle) 
+    for x in range(game.board.width):
+        for y in range(game.board.height):
+            text+= game.board.check_index(y, x) + "|"
+        text+= "\n"
+    print(text)
     
 @bottle.route('/')
 def index():
@@ -37,6 +48,8 @@ def ping():
 
 @bottle.post('/start')
 def start():
+    global prev
+    prev.last_direction = "North"
     data = bottle.request.json
 
     """
@@ -45,7 +58,7 @@ def start():
             request's data if necessary.
     """
     #print("Start: {}".format(data))
-    logging.debug("Start: {}".format(data))
+    logging.debug("Start Post")
     
     color = "#00FF00"
 
@@ -54,7 +67,7 @@ def start():
 
 @bottle.post('/move')
 def move():
-    global empty_game
+    global prev
     data = bottle.request.json
 
     """
@@ -64,16 +77,42 @@ def move():
 
     logging.debug("Move: {}".format(data))
     game = Game(data)
-    logging.info(game.board.calc_vectors(game.my_snake))
+    z = sum(game.board.calc_vectors(game.my_snake))
+    angle = math.degrees(cmath.phase(z))
+    logging.info("Sum of vectors {}<{}".format(
+            abs(z),angle ))
     
-    logging.info(repr(game.board))
-    empty_game = game
+    ideal_direction = ""
+    direction = ""
+
+    '''
+    TODO: confirm these angles
+    '''
+    
+    if angle>45 and angle<135:
+        ideal_direction = 'up'
+    elif angle>135 and angle<=180:
+        ideal_direction = 'left'
+    elif angle<45 and angle>-45:
+        ideal_direction = 'right'
+    elif angle<-45 and angle >-135:
+        ideal_direction = 'down'
+    elif angle<-135 and angle>-180:
+        ideal_direction = 'left'
+    
+    
+    #logging.info(repr(game.board))
     directions = game.legal_moves()
     
-
-    #directions = ['up', 'down', 'left', 'right']
+    if ideal_direction in directions:
+        direction = ideal_direction
+    if len(directions)  == 0:
+        directions = ['up', 'down', 'left', 'right']
+        logging.critical("Could not find a legal direction")
     direction = random.choice(directions)
-
+    
+    pretty_print(game, direction, angle)
+    logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
     return move_response(direction)
 
 
@@ -96,6 +135,7 @@ application = bottle.default_app()
 
 
 if __name__ == '__main__':
+    logging.info("setting up server at 192.168.86.46:8080")
     bottle.run(
         application,
         host=os.getenv('IP', '0.0.0.0'),

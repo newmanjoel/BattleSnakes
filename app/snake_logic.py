@@ -12,12 +12,26 @@ import logging
 import cmath
 import math
 
+class Prev():
+    def __init__(self):
+        self.last_direction = 'North'
+    
+    def get_new_direction(self, absolute_direction):
+        directions = {"North":{"North": "up", "East":"right", "South": "down", "West":"left"},
+                      "East":{},
+                      "South":{},
+                      "West":{}
+                      }
+        return directions[self.last_direction][absolute_direction]
+
 class Game():
     def __init__(self, play_state):
+        self.stored_legal_direction = []
         self.id = play_state["game"]["id"]
         self.turn = int(play_state["turn"])
         self.board = Board(play_state["board"])
         self.my_snake = play_state["you"]["id"]
+        self.board.set_my_snake(self.my_snake)
     
     def load_data(self, play_state):
         if self.id == play_state["game"]["id"]:
@@ -25,31 +39,43 @@ class Game():
         self.turn = int(play_state["turn"])
         self.board.load_data(play_state["board"])
         self.my_snake = play_state["you"]["id"]
+        self.board.set_my_snake(self.my_snake)
     
     def legal_moves(self):
-        head = (self.board.ms.head.x, self.board.ms.head.y)
+        try:
+            head = (self.board.ms.head.x, self.board.ms.head.y)
+        except Exception as e:
+            logging.critical("{}".format(e))
+            self.stored_legal_direction = []
+            return None
         nodes = list(nx.neighbors(self.board.board, head))
         logging.info("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
         
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
+        self.stored_legal_direction = []
         for node in nodes:
             # node contains 2 elements
             x_diff = head[0] - node[0] # x value
             y_diff = head[1] - node[1] # y value
             
             if x_diff > 0:
-                legal_direction.append('right')
-            elif x_diff < 0:
                 legal_direction.append('left')
+                self.stored_legal_direction.append("L")
+            elif x_diff < 0:
+                legal_direction.append('right')
+                self.stored_legal_direction.append("R")
             elif y_diff > 0:
-                legal_direction.append('down')
-            elif y_diff < 0:
                 legal_direction.append('up')
-            else:
+                self.stored_legal_direction.append("U")
+            elif y_diff < 0:
+                legal_direction.append('down')
+                self.stored_legal_direction.append("D")
+            if len(legal_direction) == 4:
                 logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
                         nodes, node, x_diff, y_diff))
         return legal_direction
+    
     
 
 class Board():
@@ -60,7 +86,6 @@ class Board():
         self.food = []
         self.snakes = []
         self.distances = {}
-        self.ms = None
         self.board = nx.grid_2d_graph(self.height, self.width)
         self.load_data(play_state)
         logging.info("board created with playspace of {},{}".format(self.height, self.width))
@@ -77,6 +102,13 @@ class Board():
     
     def __str__(self):
         return self.__repr()
+    
+    def set_my_snake(self, snake_id):
+        self.ms = None
+        for snake in self.snakes:
+            if snake.id == snake_id:
+                self.ms = snake
+                break
         
     
     def load_data(self, play_state):
@@ -121,11 +153,6 @@ class Board():
         Calculate how much the snake or food should push or pull the our snake
         '''
         mann_dist = []
-        self.ms = None
-        for snake in self.snakes:
-            if snake.id == snake_id:
-                self.ms = snake
-                break
         
         for snake in self.snakes:
             if snake.id != snake_id:
@@ -135,10 +162,21 @@ class Board():
             mann_dist.append(self.ms.head*food)
         
         return mann_dist
-        
-        
-        
-
+    
+    def check_index(self, x, y):
+        for food in self.food:
+            if x==food.x and y==food.y:
+                return "F"
+        for snake in self.snakes:
+            for link in snake.body:
+                if x == link.x and y == link.y:
+                    return "B"
+            if x==snake.head.x and y==snake.head.y:
+                return "S"
+        if (x, y) in self.board:
+            return " "
+        return "?"
+            
 class Snake():
     def __init__(self, snake_info):
         ''' This is the initialization of the snake '''
@@ -183,8 +221,8 @@ class Point():
         return (self.x * self.x + self.y * self.y)**0.5
     
     def __mul__(self, other):
-        z = complex(self.x, self.y)
-        y = complex(other.x, other.y)
+        z = complex(self.y, self.x)
+        y = complex(other.y, other.x)
         return z-y
     
     
@@ -195,8 +233,8 @@ class Body(Point):
     
     def __mul__(self, other):
         # I want to overload this to go the other way
-        z = complex(self.x, self.y)
-        y = complex(other.x, other.y)
+        z = complex(self.y, self.x)
+        y = complex(other.y, other.x)
         return y-z
     
         
