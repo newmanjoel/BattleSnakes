@@ -91,7 +91,13 @@ class Game():
         s = nx.get_node_attributes(self.board.board, "Safe")
         for i in both:
             logging.info("Trying to lookup safe nodes, {}".format(i))
-            r = s[i[1]]
+            try:
+                r = s[i[1]]
+            except KeyError as e:
+                logging.critical("Cannot find a key in the nodes. {}".format(e))
+            except Exception as e:
+                logging.critical("General issue. {}".format(e))
+            
             if r == True:
                 results.append(i[0])
         return results
