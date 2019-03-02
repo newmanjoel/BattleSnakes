@@ -77,6 +77,7 @@ class Game():
                 if results[1] == 1:
                     amount_changed += 1
                     something_changed = True
+                    logging.info("Trying to change {}".format(results))
                     self.board.board.nodes[results[0]]["Safe"] = False
                     print("Setting {} to not safe".format(results[0]))
     
