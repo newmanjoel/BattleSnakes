@@ -126,18 +126,12 @@ class Game():
     
     def cost(self):
         for snake in self.board.snakes:
-            try:
-                nodes = list(nx.neighbors(self.board.board, snake.head))
-            except Exception as e:
-                logging.critical("Could not find {} in nodes {}".format(snake.head, self.board.board))
-                return
-            for point in nodes:
-                try:
-                    logging.info("setting the cost from {} -> {}, to {}".format(snake.head, point, 10))
-                    self.board.board.edges[(snake.head, point)]['cost'] = 10
-                except Exception as e:
-                    logging.critical("Cant set the cost of the edge from {} to {}".format(snake.head, point))
-                    
+            added_cost = 1
+            head = (snake.head.x, snake.head.y)
+            for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=5):
+                logging.info("adding the cost of {} edge to {}".format(added_cost, edge))
+                self.board.board.edges[edge]['cost'] += added_cost
+                
     
     def safe_move_generation(self):
         something_changed = True
