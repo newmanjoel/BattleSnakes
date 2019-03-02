@@ -82,7 +82,7 @@ class Game():
                 if deg[1] == 1:
                     amount_changed += 1
                     something_changed = True
-                    logging.info("Trying to change {}".format((x, y)))
+                    logging.info("Trying to change {}".format(deg[0]))
                     try:
                         self.board.board.nodes[deg[0]]["Safe"] = False
                     except Exception as e:
