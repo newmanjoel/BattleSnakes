@@ -87,7 +87,7 @@ class Game():
     
     def safe_moves(self, directions, nodes):
         results = []
-        assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
+        #assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
         for i in range(len(nodes)):
             if self.board.is_safe(nodes[i]):
                 results.append(directions[i])
