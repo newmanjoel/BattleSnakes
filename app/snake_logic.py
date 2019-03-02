@@ -75,7 +75,7 @@ class Game():
     def safe_move_generation(self):
         something_changed = True
         amount_changed = 0
-        while something_changed:
+        while something_changed and amount_changed < 10:
             something_changed = False
             degrees = self.board.board.degree()
             for deg in degrees:
