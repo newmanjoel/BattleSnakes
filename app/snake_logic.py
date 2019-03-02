@@ -31,7 +31,7 @@ class Game():
         try:
             head = (self.board.ms.head.x, self.board.ms.head.y)
         except Exception as e:
-            logging.critical("{}".format(e))
+            logging.critical("Cannot create Head: {}".format(e))
             self.stored_legal_direction = []
             return None
         nodes = list(nx.neighbors(self.board.board, head))
@@ -79,7 +79,7 @@ class Game():
             something_changed = False
             degrees = self.board.board.degree()
             for deg in degrees:
-                if deg[1] == 1:
+                if deg[1] == 1 and self.board.board.nodes[deg[0]]["Safe"] == True:
                     amount_changed += 1
                     something_changed = True
                     logging.info("Trying to change {}".format(deg[0]))
