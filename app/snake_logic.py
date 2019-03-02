@@ -68,8 +68,47 @@ class Game():
                         nodes, node, x_diff, y_diff))
         return [legal_direction, legal_nodes]
     
+    def relative_direction(self, starting_node, ending_node):
+        if type(ending_node) == type((-1,-1)):
+            x_diff = starting_node.x - ending_node[0]
+            y_diff = starting_node.y - ending_node[1]
+        else:
+            x_diff = starting_node.x - ending_node.x
+            y_diff = starting_node.y - ending_node.y
+        if x_diff > 0.1:
+            return "left"
+        elif x_diff < 0.1:
+            return "right"
+        elif y_diff > 0.1:
+            return "up"
+        elif y_diff < 0.1:
+            return "down
+        
+        
+    
     def go_to_tail(self, head, tail):
-        return nx.astar_path(self.board.board, head, self.board.ms.body[-1])
+        head_t = (head.x, head.y)
+        tail_t = (tail.x, tail.y)
+        all_nodes = list(self.board.board.nodes)
+        #logging.info("all nodes are {}".format(all_nodes))
+        #logging.info("head {}, tail {}, head in nodes {}, tail in nodes {}".format(head_t, tail_t, head_t in all_nodes, tail_t in all_nodes))
+        return nx.astar_path(self.board.board, head_t, tail_t)
+    
+    def go_to_closest_food(self, head):
+        head_t = (head.x, head.y)
+        target = (-1, -1)
+        max_dist = 100
+        for i in self.board.food:
+            dist = math.sqrt((i.x-head.x)**2 + (i.y-head.y)**2)
+            if dist < max_dist:
+                max_dist = dist
+                target = (i.x, i.y)
+        if target == (-1, -1):
+            logging.critical("Found no food, chasing tail")
+            return self.go_to_tail(self.board.ms.head, self.board.ms.body[-1])
+        return nx.astar_path(self.board.board, head_t, target)
+        
+        
     
     def safe_move_generation(self):
         something_changed = True
@@ -381,4 +420,5 @@ if __name__ == '__main__':
     td = TD()
     game = Game(td.start)
     #[dirs, nods] = game.legal_moves(game.board.ms.head)
+    #game.go_to_tail(game.board.ms.head, game.board.ms.body[-1]))
     

@@ -85,9 +85,15 @@ def move():
     safe_directions = game.safe_moves(legal_directions, nodes)
     end = timer()
     logging.info("safe took {}".format(end-start))
+    path = []
+    if(game.board.ms.health > 30):
+        path = game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])
+    else:
+        #find closest food and go for it
+        path = game.go_to_closest_food(game.board.ms.head)
+    logging.info("Want to go {}".format(path))
     
-    #if(game.board.ms.health > 30):
-    #    logging.info("Want to go {}".format(game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])))
+    path_direction = game.relative_direction(game.board.ms.head, path[1])
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
@@ -99,8 +105,12 @@ def move():
             logging.info("No safe directions, defaulting to legal moves")
     else:
         directions = safe_directions
-    
-    direction = random.choice(directions)
+    if path_direction in directions:
+        logging.info("path direction choice")
+        direction = path_direction
+    else:
+        logging.info("random direction choice")
+        direction = random.choice(directions)
     angle = ""
     #pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
