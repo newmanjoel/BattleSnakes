@@ -77,9 +77,11 @@ class Game():
                 if results[1] == 1:
                     amount_changed += 1
                     something_changed = True
-                    logging.info("Trying to change {}".format(results))
-                    self.board.board.nodes[results[0]]["Safe"] = False
-                    print("Setting {} to not safe".format(results[0]))
+                    logging.info("Trying to change {}, {}|{}".format(results, results[0], results[1]))
+                    try:
+                        self.board.board.nodes[results[0]]["Safe"] = False
+                    except Exception as e:
+                        logging.critical("Cant set safe mode: {}".format(e))
     
     def safe_moves(self, directions, nodes):
         results = []
