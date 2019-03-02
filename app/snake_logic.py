@@ -77,19 +77,17 @@ class Game():
         amount_changed = 0
         while something_changed:
             something_changed = False
-            for x in range(self.board.width):
-                for y in range(self.board.height):
-                    connectiveness = self.board.board.degree((x, y))
-                    #logging.info("The degree is {}, for {},{}".format(connectiveness, x, y))
-                    if connectiveness == 1:
-                        amount_changed += 1
-                        something_changed = True
-                        logging.info("Trying to change {}".format((x, y)))
-                        try:
-                            self.board.board.nodes[(x,y)]["Safe"] = False
-                        except Exception as e:
-                            logging.critical("Cant set safe mode: {}".format(e))
-    
+            degrees = self.board.board.degree()
+            for deg in degrees:
+                if deg[1] == 1:
+                    amount_changed += 1
+                    something_changed = True
+                    logging.info("Trying to change {}".format((x, y)))
+                    try:
+                        self.board.board.nodes[deg[0]]["Safe"] = False
+                    except Exception as e:
+                        logging.critical("Cant set safe mode: {}".format(e))
+
     def safe_moves(self, directions, nodes):
         results = []
         #assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
@@ -381,5 +379,5 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
     td = TD()
     game = Game(td.start)
-    [dirs, nods] = game.legal_moves()
+    [dirs, nods,s] = game.legal_moves()
     
