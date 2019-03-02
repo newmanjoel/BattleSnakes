@@ -124,13 +124,7 @@ class Board():
         return self.__repr()
     
     def is_safe(self, node):
-        #assert(len(node) != 2, "node is not a tuple")
-        safe = nx.get_node_attributes(self.board, "Safe")
-        try:
-            return safe[(node)]
-        except Exception as e:
-            logging.critical("cant check to see if something is safe, {}".format(e))
-        return True
+        return self.board.degree(node) == 1
 
     def set_my_snake(self, snake_id):
         self.ms = None
