@@ -156,7 +156,7 @@ class Game():
                 continue
             head = (snake.head.x, snake.head.y)
             try:
-                if len(self.board.ms.body)< len(snake.body):
+                if len(self.board.ms.body) <= len(snake.body):
                     nodes = list(nx.neighbors(self.board.board, head))
                     for node in nodes:
                         logging.info("Setting node {} to unsafe".format(node))
