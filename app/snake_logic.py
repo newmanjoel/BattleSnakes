@@ -35,7 +35,7 @@ class Game():
             self.stored_legal_direction = []
             return None
         nodes = list(nx.neighbors(self.board.board, head))
-        logging.info("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
+        logging.debug("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
 
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
@@ -79,7 +79,7 @@ class Game():
                     if connectiveness == 1:
                         amount_changed += 1
                         something_changed = False
-                        logging.info("Trying to change {}".format((x, y)))
+                        logging.debug("Trying to change {}".format((x, y)))
                         try:
                             self.board.board.nodes[(x,y)]["Safe"] = False
                         except Exception as e:
@@ -90,6 +90,7 @@ class Game():
         #assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
         for i in range(len(nodes)):
             if self.board.is_safe(nodes[i]):
+                logging.info("{}, {}, found to be safe".format(nodes[i], directions[i]))
                 results.append(directions[i])
         
         return results
