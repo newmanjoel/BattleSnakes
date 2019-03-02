@@ -99,7 +99,7 @@ def move():
 
     #logging.info(repr(game.board))
     [legal_directions, nodes] = game.legal_moves()
-    logging.info("Legal Directions: {}, Nodes: {}".format(legal_directions, nodes))
+    logging.info("Head: {}, Legal Directions: {}, Nodes: {}".format(game.board.ms.head, legal_directions, nodes))
     safe_directions = game.safe_moves(legal_directions, nodes)
 
     #if ideal_direction in directions:

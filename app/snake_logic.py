@@ -75,13 +75,13 @@ class Game():
             for x in range(self.board.width):
                 for y in range(self.board.height):
                     connectiveness = self.board.board.degree((x, y))
-                    logging.info("The degree is {}, for {},{}".format(connectiveness, x, y))
+                    #logging.info("The degree is {}, for {},{}".format(connectiveness, x, y))
                     if connectiveness == 1:
                         amount_changed += 1
                         something_changed = False
                         logging.info("Trying to change {}, {}|{}".format(results, results[0], results[1]))
                         try:
-                            self.board.board.nodes[results[0]]["Safe"] = False
+                            self.board.board.nodes[(x,y)]["Safe"] = False
                         except Exception as e:
                             logging.critical("Cant set safe mode: {}".format(e))
     
@@ -89,7 +89,9 @@ class Game():
         results = []
         both = zip(directions, nodes)
         for i in both:
-            if self.board.board.nodes[i[1]]["Safe"] == True:
+            logging.info("Trying to lookup safe nodes")
+            r = self.board.board.nodes[i[1]]["Safe"]
+            if r == True:
                 results.append(i(0))
         return results
     
