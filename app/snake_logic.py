@@ -126,7 +126,7 @@ class Game():
     
     def cost(self):
         for snake in self.board.snakes:
-            added_cost = 1
+            added_cost = 10
             head = (snake.head.x, snake.head.y)
             for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=5):
                 logging.info("adding the cost of {} edge to {}".format(added_cost, edge))
