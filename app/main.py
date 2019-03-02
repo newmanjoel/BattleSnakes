@@ -86,8 +86,8 @@ def move():
     end = timer()
     logging.info("safe took {}".format(end-start))
     
-    if(game.board.ms.health > 30):
-        logging.info("Want to go {}".format(game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])))
+    #if(game.board.ms.health > 30):
+    #    logging.info("Want to go {}".format(game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])))
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
