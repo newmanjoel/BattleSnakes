@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 25 15:08:30 2019
 
-@author: joelnewman
-"""
 
 import networkx as nx
 import json
@@ -20,6 +16,8 @@ class Game():
         self.board = Board(play_state["board"])
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
+        nx.set_node_attributes(self.board.board, True, "Safe")
+        self.safe_move_generation()
 
     def load_data(self, play_state):
         if self.id == play_state["game"]["id"]:
@@ -41,6 +39,7 @@ class Game():
 
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
+        legal_nodes = []
         self.stored_legal_direction = []
         for node in nodes:
             # node contains 2 elements
@@ -49,20 +48,47 @@ class Game():
 
             if x_diff > 0:
                 legal_direction.append('left')
+                legal_nodes.append(node)
                 self.stored_legal_direction.append("L")
             elif x_diff < 0:
                 legal_direction.append('right')
+                legal_nodes.append(node)
                 self.stored_legal_direction.append("R")
             elif y_diff > 0:
                 legal_direction.append('up')
+                legal_nodes.append(node)
                 self.stored_legal_direction.append("U")
             elif y_diff < 0:
                 legal_direction.append('down')
+                legal_nodes.append(node)
                 self.stored_legal_direction.append("D")
             if len(legal_direction) == 4:
                 logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
                         nodes, node, x_diff, y_diff))
-        return legal_direction
+        return [legal_direction, legal_nodes]
+    
+    def safe_move_generation(self):
+        something_changed = True
+        amount_changed = 0
+        while something_changed:
+            something_changed = False
+            connectiveness = nx.degree(self.board.board)
+            for results in connectiveness:
+                if results[1] == 1:
+                    amount_changed += 1
+                    something_changed = True
+                    self.board.board.nodes[results[0]]["Safe"] = False
+                    print("Setting {} to not safe".format(results[0]))
+    
+    def safe_moves(self, directions, nodes):
+        results = []
+        both = zip(directions, nodes)
+        for i in both:
+            if self.board.board.nodes[i(1)]["Safe"] == True:
+                results.append(i(0))
+        return results
+    
+                    
 
 
 
@@ -134,7 +160,7 @@ class Board():
         Calculate how far each node is from every other node.
         Note that this only calculates the distance, not the path.
         '''
-        self.distances = dict(nx.all_pairs_shortest_path_length(self.board))
+        self.distances = dict(nx.all_pairs_shortest_path_length(self.board), cutoff=15)
 
     def calc_vectors(self, snake_id):
         '''

@@ -98,13 +98,21 @@ def move():
 
 
     #logging.info(repr(game.board))
-    directions = game.legal_moves()
+    [legal_directions, nodes] = game.legal_moves()
+    safe_directions = game.safe_move(legal_directions, nodes)
 
-    if ideal_direction in directions:
-        direction = ideal_direction
-    if len(directions)  == 0:
-        directions = ['up', 'down', 'left', 'right']
-        logging.critical("Could not find a legal direction")
+    #if ideal_direction in directions:
+    #    direction = ideal_direction
+    if len(safe_directions)  == 0:
+        if len(legal_directions) == 0:
+            # we are screwed at this point just hope that we are wrong and have luck
+            directions = ['up', 'down', 'left', 'right']
+            logging.critical("Could not find a legal direction")
+        else:
+            directions = legal_directions
+    else:
+        directions = safe_directions
+    
     direction = random.choice(directions)
 
     pretty_print(game, direction, angle)
