@@ -101,6 +101,7 @@ class Game():
         head_t = (head.x, head.y)
         target = (-1, -1)
         max_dist = 100
+        path = []
         for i in self.board.food:
             dist = math.sqrt((i.x-head.x)**2 + (i.y-head.y)**2)
             if dist < max_dist:
@@ -108,9 +109,17 @@ class Game():
                 target = (i.x, i.y)
         if target == (-1, -1):
             logging.critical("Found no food, chasing tail")
-            return self.go_to_tail(self.board.ms.head, self.board.ms.body[-1])
+            try:
+                path = self.go_to_tail(self.board.ms.head, self.board.ms.body[-1])
+            except Exception as e:
+                logging.critical("No path found")
         logging.info("Chasing the food at {},{}".format(target[0], target[1]))
-        return nx.astar_path(self.board.board, head_t, target)
+        try:
+            path = nx.astar_path(self.board.board, head_t, target)
+        except Exception as e:
+            logging.critical("No Path found")
+        
+        return path
     
     def heur(self, a, b):
         ''''heuristic function '''
