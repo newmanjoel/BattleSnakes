@@ -95,8 +95,10 @@ class Game():
                 r = s[i[1]]
             except KeyError as e:
                 logging.critical("Cannot find a key in the nodes. {}".format(e))
+                r = False
             except Exception as e:
                 logging.critical("General issue. {}".format(e))
+                r = False
             
             if r == True:
                 results.append(i[0])
