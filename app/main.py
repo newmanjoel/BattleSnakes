@@ -78,20 +78,22 @@ def move():
     start = timer()
     [legal_directions, nodes] = game.legal_moves(game.board.ms.head.x, game.board.ms.head.y)
     end = timer()
-    logging.info("legal moves took {}".format(end-start))
+    logging.debug("legal moves took {}".format(end-start))
     
     logging.debug("Head: {}, Legal Directions: {}, Nodes: {}".format(game.board.ms.head, legal_directions, nodes))
     start = timer()
     safe_directions = game.safe_moves(legal_directions, nodes)
     end = timer()
-    logging.info("safe took {}".format(end-start))
+    logging.debug("safe took {}".format(end-start))
     path = []
     if(game.board.ms.health > 30):
+        logging.info("chasing tail")
         path = game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])
     else:
         #find closest food and go for it
+        logging.info("chasing food")
         path = game.go_to_closest_food(game.board.ms.head)
-    logging.info("Want to go {}".format(path))
+    logging.info("Want to take {} path".format(path))
     
     path_direction = ""
     if len(path) > 0:
