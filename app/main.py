@@ -6,6 +6,7 @@ import logging
 from snake_logic import Game, Snake, Board, TD
 
 import math, cmath
+import networkx as nx
 from api import ping_response, start_response, move_response, end_response
 logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 
@@ -48,7 +49,7 @@ def ping():
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-
+    logging.warning("The version of network x is {}".format(nx.__version__))
     """
     TODO: If you intend to have a stateful snake AI,
             initialize your snake state here using the
