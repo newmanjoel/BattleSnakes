@@ -83,7 +83,7 @@ class Game():
                     #logging.info("The degree is {}, for {},{}".format(connectiveness, x, y))
                     if connectiveness == 1:
                         amount_changed += 1
-                        something_changed = False
+                        something_changed = True
                         logging.info("Trying to change {}".format((x, y)))
                         try:
                             self.board.board.nodes[(x,y)]["Safe"] = False
@@ -130,7 +130,7 @@ class Board():
         return self.__repr()
     
     def is_safe(self, node):
-        return self.board.degree(node) == 1
+        return self.board.nodes[(node)]["Safe"]
 
     def set_my_snake(self, snake_id):
         self.ms = None

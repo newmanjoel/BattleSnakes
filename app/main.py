@@ -66,7 +66,6 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-    logging.warning("The version of network x is {}".format(nx.__version__))
     """
     TODO: Using the data from the endpoint request object, your
             snake AI must choose a direction to move in.
@@ -100,12 +99,8 @@ def move():
     #logging.info(repr(game.board))
     [legal_directions, nodes, safe] = game.legal_moves()
     logging.info("Head: {}, Legal Directions: {}, Nodes: {}, Safe:{}".format(game.board.ms.head, legal_directions, nodes, safe))
-    #safe_directions = game.safe_moves(legal_directions, nodes)
-    safe_directions = []
-    for i in range(len(safe)):
-        if safe[i]:
-            logging.info("Safe direction {}".format(legal_directions[i]))
-            safe_directions.append(legal_directions[i])
+    
+    safe_directions = game.safe_moves(legal_directions, nodes)
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
