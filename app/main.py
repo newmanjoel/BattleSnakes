@@ -115,7 +115,7 @@ def move():
     else:
         logging.info("random direction choice")
         direction = random.choice(directions)
-    direction = path_direction
+    #direction = path_direction
     angle = ""
     #pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))

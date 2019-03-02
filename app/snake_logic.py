@@ -112,7 +112,9 @@ class Game():
         logging.info("Chasing the food at {},{}".format(target[0], target[1]))
         return nx.astar_path(self.board.board, head_t, target)
     
-    
+    def heur(self, a, b):
+        ''''heuristic function '''
+        return 1
         
         
     
