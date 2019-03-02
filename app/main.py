@@ -113,7 +113,7 @@ def move():
         directions = safe_directions
     
     direction = random.choice(directions)
-
+    angle = ""
     pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
     return move_response(direction)
