@@ -3,24 +3,23 @@ import os
 import random
 import bottle
 import logging
-from snake_logic import Game, Snake, Board, TD, Prev
+from snake_logic import Game, Snake, Board, TD
 
 import math, cmath
 from api import ping_response, start_response, move_response, end_response
 logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 
-prev = Prev()
 
 def pretty_print(game, chosen_direction, angle):
     text = ""
     text += "W:{}\tH:{}\tT:{}\n".format(game.board.width, game.board.height, game.turn)
-    text += "{}".format(game.stored_legal_direction) +" {} {}\n".format(chosen_direction, angle) 
+    text += "{}".format(game.stored_legal_direction) +" {} {}\n".format(chosen_direction, angle)
     for x in range(game.board.width):
         for y in range(game.board.height):
             text+= game.board.check_index(y, x) + "|"
         text+= "\n"
     print(text)
-    
+
 @bottle.route('/')
 def index():
     return '''
@@ -48,8 +47,6 @@ def ping():
 
 @bottle.post('/start')
 def start():
-    global prev
-    prev.last_direction = "North"
     data = bottle.request.json
 
     """
@@ -59,7 +56,7 @@ def start():
     """
     #print("Start: {}".format(data))
     logging.debug("Start Post")
-    
+
     color = "#00FF00"
 
     return start_response(color)
@@ -67,7 +64,6 @@ def start():
 
 @bottle.post('/move')
 def move():
-    global prev
     data = bottle.request.json
 
     """
@@ -81,14 +77,14 @@ def move():
     angle = math.degrees(cmath.phase(z))
     logging.info("Sum of vectors {}<{}".format(
             abs(z),angle ))
-    
+
     ideal_direction = ""
     direction = ""
 
     '''
     TODO: confirm these angles
     '''
-    
+
     if angle>45 and angle<135:
         ideal_direction = 'up'
     elif angle>135 and angle<=180:
@@ -99,18 +95,18 @@ def move():
         ideal_direction = 'down'
     elif angle<-135 and angle>-180:
         ideal_direction = 'left'
-    
-    
+
+
     #logging.info(repr(game.board))
     directions = game.legal_moves()
-    
+
     if ideal_direction in directions:
         direction = ideal_direction
     if len(directions)  == 0:
         directions = ['up', 'down', 'left', 'right']
         logging.critical("Could not find a legal direction")
     direction = random.choice(directions)
-    
+
     pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
     return move_response(direction)

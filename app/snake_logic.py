@@ -12,18 +12,6 @@ import logging
 import cmath
 import math
 
-class Prev():
-    def __init__(self):
-        self.last_direction = 'North'
-    
-    def get_new_direction(self, absolute_direction):
-        directions = {"North":{"North": "up", "East":"right", "South": "down", "West":"left"},
-                      "East":{},
-                      "South":{},
-                      "West":{}
-                      }
-        return directions[self.last_direction][absolute_direction]
-
 class Game():
     def __init__(self, play_state):
         self.stored_legal_direction = []
@@ -32,7 +20,7 @@ class Game():
         self.board = Board(play_state["board"])
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
-    
+
     def load_data(self, play_state):
         if self.id == play_state["game"]["id"]:
             logging.info("Loading Data into the wrong game")
@@ -40,7 +28,7 @@ class Game():
         self.board.load_data(play_state["board"])
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
-    
+
     def legal_moves(self):
         try:
             head = (self.board.ms.head.x, self.board.ms.head.y)
@@ -50,7 +38,7 @@ class Game():
             return None
         nodes = list(nx.neighbors(self.board.board, head))
         logging.info("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
-        
+
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
         self.stored_legal_direction = []
@@ -58,7 +46,7 @@ class Game():
             # node contains 2 elements
             x_diff = head[0] - node[0] # x value
             y_diff = head[1] - node[1] # y value
-            
+
             if x_diff > 0:
                 legal_direction.append('left')
                 self.stored_legal_direction.append("L")
@@ -75,8 +63,8 @@ class Game():
                 logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
                         nodes, node, x_diff, y_diff))
         return legal_direction
-    
-    
+
+
 
 class Board():
     def __init__(self, play_state):
@@ -89,7 +77,7 @@ class Board():
         self.board = nx.grid_2d_graph(self.height, self.width)
         self.load_data(play_state)
         logging.info("board created with playspace of {},{}".format(self.height, self.width))
-    
+
     def __repr__(self):
         text = ""
         text += "Snakes:\n"
@@ -99,34 +87,34 @@ class Board():
         for food in self.food:
             text += "\t{}\n".format(str(food))
         return text
-    
+
     def __str__(self):
         return self.__repr()
-    
+
     def set_my_snake(self, snake_id):
         self.ms = None
         for snake in self.snakes:
             if snake.id == snake_id:
                 self.ms = snake
                 break
-        
-    
+
+
     def load_data(self, play_state):
-        ''' 
+        '''
         Used to load the data into the board from the json data provided
         by the server
         '''
         self.snakes = []
         for snek in play_state["snakes"]:
             self.snakes.append(Snake(snek))
-        
+
         self.food = []
         for fuud in play_state["food"]:
             self.food.append(Food(fuud))
-        
+
         self.possible_moves()
         self.calc_distances()
-        
+
     def possible_moves(self):
         '''
         Remove all the bodies from being a valid move.
@@ -140,29 +128,29 @@ class Board():
                     self.board.remove_node((body.x, body.y))
                 except Exception as e:
                     logging.critical(e)
-    
+
     def calc_distances(self):
         '''
         Calculate how far each node is from every other node.
         Note that this only calculates the distance, not the path.
         '''
         self.distances = dict(nx.all_pairs_shortest_path_length(self.board))
-            
+
     def calc_vectors(self, snake_id):
         '''
         Calculate how much the snake or food should push or pull the our snake
         '''
         mann_dist = []
-        
+
         for snake in self.snakes:
             if snake.id != snake_id:
                 mann_dist.append(self.ms.head*snake.head)
-        
+
         for food in self.food:
             mann_dist.append(self.ms.head*food)
-        
+
         return mann_dist
-    
+
     def check_index(self, x, y):
         for food in self.food:
             if x==food.x and y==food.y:
@@ -176,7 +164,7 @@ class Board():
         if (x, y) in self.board:
             return " "
         return "?"
-            
+
 class Snake():
     def __init__(self, snake_info):
         ''' This is the initialization of the snake '''
@@ -190,54 +178,54 @@ class Snake():
                 self.head = Body(link)
             else:
                 self.body.append(Body(link))
-    
+
     def __str__(self):
         return "{} | {} | {} {}".format(self.name, self.health, self.head, self.bodies())
-    
+
     def bodies(self):
         body_data = ""
         for link in self.body:
             body_data = body_data + " " + str(link)
         return body_data
-        
+
 class Point():
     def __init__(self, lx = -1, ly = -1):
         self.x = lx
         self.y = ly
-        
+
     def __str__(self):
         return "({},{})".format(self.x, self.y)
-    
+
     def __repr__(self):
         return "({},{})".format(self.x, self.y)
-    
+
     def __getitem__(self, index):
         return [self.x, self.y]
-    
+
     def __sub__(self, other):
         return Point(self.x - other.x, self.y - other.y)
-    
+
     def __abs__(self):
         return (self.x * self.x + self.y * self.y)**0.5
-    
+
     def __mul__(self, other):
         z = complex(self.y, self.x)
         y = complex(other.y, other.x)
         return z-y
-    
-    
+
+
 class Body(Point):
     def __init__(self, body_info):
         self.x = int(body_info["x"])
         self.y = int(body_info["y"])
-    
+
     def __mul__(self, other):
         # I want to overload this to go the other way
         z = complex(self.y, self.x)
         y = complex(other.y, other.x)
         return y-z
-    
-        
+
+
 
 class Food(Point):
     def __init__(self, food_info):
@@ -347,4 +335,3 @@ class TD:
 """
 
         self.start = json.loads(self.start)
-        
