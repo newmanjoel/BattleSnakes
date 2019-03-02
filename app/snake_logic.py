@@ -14,9 +14,9 @@ class Game():
         self.id = play_state["game"]["id"]
         self.turn = int(play_state["turn"])
         self.board = Board(play_state["board"])
+        nx.set_node_attributes(self.board.board, True, "Safe")
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
-        nx.set_node_attributes(self.board.board, True, "Safe")
         self.safe_move_generation()
 
     def load_data(self, play_state):
@@ -135,7 +135,7 @@ class Board():
         for snake in self.snakes:
             if snake.id == snake_id:
                 self.ms = snake
-                self.board.nodes[snake.head]["Safe"] = False
+                #self.board.nodes[snake.head]["Safe"] = False
                 break
 
     def load_data(self, play_state):
