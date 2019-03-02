@@ -86,7 +86,7 @@ def move():
     end = timer()
     logging.debug("safe took {}".format(end-start))
     path = []
-    if(game.board.ms.health > 50):
+    if(game.board.ms.health > 80):
         logging.info("chasing tail")
         path = game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])
     else:
