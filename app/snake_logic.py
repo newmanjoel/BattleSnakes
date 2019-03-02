@@ -15,9 +15,11 @@ class Game():
         self.turn = int(play_state["turn"])
         self.board = Board(play_state["board"])
         nx.set_node_attributes(self.board.board, True, "Safe")
+        nx.set_edge_attributes(self.board.board, 1, "cost")
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
         self.safe_move_generation()
+        self.cost()
 
     def load_data(self, play_state):
         if self.id == play_state["game"]["id"]:
@@ -95,7 +97,7 @@ class Game():
         #logging.info("head {}, tail {}, head in nodes {}, tail in nodes {}".format(head_t, tail_t, head_t in all_nodes, tail_t in all_nodes))
         if(head_t in all_nodes and tail_t in all_nodes):
             try:
-                path =  nx.astar_path(self.board.board, head_t, tail_t)
+                path =  nx.astar_path(self.board.board, head_t, tail_t, weight='cost')
             except Exception as e:
                 logging.critical("Could not get from head to tail: {}".format(e))
         
@@ -119,17 +121,26 @@ class Game():
                 logging.critical("No path found")
         logging.info("Chasing the food at {},{}".format(target[0], target[1]))
         try:
-            path = nx.astar_path(self.board.board, head_t, target)
+            path = nx.astar_path(self.board.board, head_t, target, weight='cost')
         except Exception as e:
             logging.critical("No Path found")
         
         return path
     
-    def heur(self, a, b):
-        ''''heuristic function '''
-        return 1
-        
-        
+    
+    def cost(self):
+        for snake in self.board.snakes:
+            try:
+                nodes = list(nx.neighbors(self.board.board, snake.head))
+            except Exception as e:
+                logging.critical("Could not find {} in nodes {}".format(snake.head, self.board.board))
+                return
+            for point in nodes:
+                try:
+                    self.board.board.edges[(snake.head, point)]['cost'] = 10
+                except Exception as e:
+                    logging.critical("Cant set the cost of the edge from {} to {}".format(snake.head, point))
+                    
     
     def safe_move_generation(self):
         something_changed = True
