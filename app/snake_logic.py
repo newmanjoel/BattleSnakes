@@ -158,7 +158,8 @@ class Game():
             try:
                 nodes = list(nx.neighbors(self.board.board, head))
                 for node in nodes:
-                    self.board.board.nodes[head]["Safe"] = False
+                    logging.info("Setting node {} to unsafe".format(node))
+                    self.board.board.nodes[node]["Safe"] = False
             except Exception as e:
                 logging.critical("Cant set safe mode: {}".format(e))
                     
