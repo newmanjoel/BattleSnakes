@@ -27,7 +27,9 @@ class Game():
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
 
-    def legal_moves(self, head):
+    def legal_moves(self, x, y):
+        head = (x, y)
+        print(head)
         try:
             nodes = list(nx.neighbors(self.board.board, head))
         except Exception as e:
@@ -161,8 +163,8 @@ class Board():
         for snake in self.snakes:
             for body in range(len(snake.body)-1):
                 try:
-                    #self.board.remove_node((snake.body[body].x, snake.body[body].y))
-                    self.board.nodes[(snake.body[body].x, snake.body[body].y)]["Safe"] = False
+                    self.board.remove_node((snake.body[body].x, snake.body[body].y))
+                    #self.board.nodes[(snake.body[body].x, snake.body[body].y)]["Safe"] = False
                 except Exception as e:
                     logging.critical(e)
 
@@ -332,7 +334,7 @@ class TD:
     "width": 15,
     "food": [
       {
-        "x": 1,
+        "x": 10,
         "y": 3
       }
     ],
@@ -378,5 +380,5 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
     td = TD()
     game = Game(td.start)
-    [dirs, nods] = game.legal_moves(game.board.ms.head)
+    #[dirs, nods] = game.legal_moves(game.board.ms.head)
     

@@ -103,7 +103,7 @@ def move():
 
     #logging.info(repr(game.board))
     start = timer()
-    [legal_directions, nodes] = game.legal_moves(game.board.ms.head)
+    [legal_directions, nodes] = game.legal_moves(game.board.ms.head.x, game.board.ms.head.y)
     end = timer()
     logging.info("legal moves took {}".format(end-start))
     
