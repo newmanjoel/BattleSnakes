@@ -82,7 +82,7 @@ class Game():
         elif y_diff > 0.1:
             return "up"
         elif y_diff < 0.1:
-            return "down
+            return "down"
         
         
     
