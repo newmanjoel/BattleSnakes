@@ -111,6 +111,7 @@ class Game():
             y1 = i.y
             x2 = head.x
             y2 = head.y
+            dist = 1000
             try:
                 dist = nx.astar_path_length(self.board.board, (x2, y2),(x1,y1), weight='cost')
             except Exception as e:
