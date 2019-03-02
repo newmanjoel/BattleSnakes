@@ -156,10 +156,11 @@ class Game():
                 continue
             head = (snake.head.x, snake.head.y)
             try:
-                nodes = list(nx.neighbors(self.board.board, head))
-                for node in nodes:
-                    logging.info("Setting node {} to unsafe".format(node))
-                    self.board.board.nodes[node]["Safe"] = False
+                if len(self.board.ms.body)< len(snake.body):
+                    nodes = list(nx.neighbors(self.board.board, head))
+                    for node in nodes:
+                        logging.info("Setting node {} to unsafe".format(node))
+                        self.board.board.nodes[node]["Safe"] = False
             except Exception as e:
                 logging.critical("Cant set safe mode: {}".format(e))
                     
