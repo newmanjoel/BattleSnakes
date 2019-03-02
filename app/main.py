@@ -12,14 +12,15 @@ logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 
 
 def pretty_print(game, chosen_direction, angle):
-    text = ""
-    text += "W:{}\tH:{}\tT:{}\n".format(game.board.width, game.board.height, game.turn)
-    text += "{}".format(game.stored_legal_direction) +" {} {}\n".format(chosen_direction, angle)
-    for x in range(game.board.width):
-        for y in range(game.board.height):
-            text+= game.board.check_index(y, x) + "|"
-        text+= "\n"
-    print(text)
+    if logging.getLogger().getEffectiveLevel() > 10:
+        text = ""
+        text += "W:{}\tH:{}\tT:{}\n".format(game.board.width, game.board.height, game.turn)
+        text += "{}".format(game.stored_legal_direction) +" {} {}\n".format(chosen_direction, angle)
+        for x in range(game.board.width):
+            for y in range(game.board.height):
+                text+= game.board.check_index(y, x) + "|"
+            text+= "\n"
+        logging.debug(text)
 
 @bottle.route('/')
 def index():
@@ -73,6 +74,7 @@ def move():
 
     logging.debug("Move: {}".format(data))
     game = Game(data)
+    '''
     z = sum(game.board.calc_vectors(game.my_snake))
     angle = math.degrees(cmath.phase(z))
     logging.info("Sum of vectors {}<{}".format(abs(z),angle ))
@@ -80,9 +82,6 @@ def move():
     ideal_direction = ""
     direction = ""
 
-    '''
-    TODO: confirm these angles
-    '''
 
     if angle>45 and angle<135:
         ideal_direction = 'up'
@@ -94,7 +93,7 @@ def move():
         ideal_direction = 'down'
     elif angle<-135 and angle>-180:
         ideal_direction = 'left'
-
+        '''
 
     #logging.info(repr(game.board))
     [legal_directions, nodes, safe] = game.legal_moves()
