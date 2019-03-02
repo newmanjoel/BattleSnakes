@@ -135,6 +135,7 @@ class Board():
         for snake in self.snakes:
             if snake.id == snake_id:
                 self.ms = snake
+                self.board.nodes[snake.head]["Safe"] = False
                 break
 
     def load_data(self, play_state):
