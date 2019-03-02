@@ -28,6 +28,7 @@ class Game():
         self.board.load_data(play_state["board"])
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
+        
 
     def legal_moves(self, x, y):
         head = (x, y)
@@ -85,16 +86,12 @@ class Game():
             return 'up'
         elif y_diff < 0.1:
             return 'down'
-        
-        
-    
+
     def go_to_tail(self, head, tail):
         head_t = (head.x, head.y)
         tail_t = (tail.x, tail.y)
         all_nodes = list(self.board.board.nodes)
         path = []
-        #logging.info("all nodes are {}".format(all_nodes))
-        #logging.info("head {}, tail {}, head in nodes {}, tail in nodes {}".format(head_t, tail_t, head_t in all_nodes, tail_t in all_nodes))
         if(head_t in all_nodes and tail_t in all_nodes):
             try:
                 path =  nx.astar_path(self.board.board, head_t, tail_t, weight='cost')
@@ -124,7 +121,6 @@ class Game():
             path = nx.astar_path(self.board.board, head_t, target, weight='cost')
         except Exception as e:
             logging.critical("No Path found")
-        
         return path
     
     
@@ -137,6 +133,7 @@ class Game():
                 return
             for point in nodes:
                 try:
+                    logging.info("setting the cost from {} -> {}, to {}".format(snake.head, point, 10))
                     self.board.board.edges[(snake.head, point)]['cost'] = 10
                 except Exception as e:
                     logging.critical("Cant set the cost of the edge from {} to {}".format(snake.head, point))
