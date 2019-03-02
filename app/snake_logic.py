@@ -76,7 +76,7 @@ class Game():
             for results in connectiveness:
                 if results[1] == 1:
                     amount_changed += 1
-                    something_changed = True
+                    something_changed = False
                     logging.info("Trying to change {}, {}|{}".format(results, results[0], results[1]))
                     try:
                         self.board.board.nodes[results[0]]["Safe"] = False
