@@ -93,7 +93,9 @@ def move():
         path = game.go_to_closest_food(game.board.ms.head)
     logging.info("Want to go {}".format(path))
     
-    path_direction = game.relative_direction(game.board.ms.head, path[1])
+    path_direction = ""
+    if len(path) > 0:
+        path_direction = game.relative_direction(game.board.ms.head, path[1])
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
@@ -105,7 +107,7 @@ def move():
             logging.info("No safe directions, defaulting to legal moves")
     else:
         directions = safe_directions
-    if path_direction in directions:
+    if path_direction in directions and path_direction != "":
         logging.info("path direction choice")
         direction = path_direction
     else:

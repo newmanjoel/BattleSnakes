@@ -92,7 +92,10 @@ class Game():
         all_nodes = list(self.board.board.nodes)
         #logging.info("all nodes are {}".format(all_nodes))
         #logging.info("head {}, tail {}, head in nodes {}, tail in nodes {}".format(head_t, tail_t, head_t in all_nodes, tail_t in all_nodes))
-        return nx.astar_path(self.board.board, head_t, tail_t)
+        if(head_t in all_nodes and tail_t in all_nodes):
+            return nx.astar_path(self.board.board, head_t, tail_t)
+        else:
+            return []
     
     def go_to_closest_food(self, head):
         head_t = (head.x, head.y)
