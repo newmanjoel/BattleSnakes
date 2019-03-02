@@ -109,12 +109,13 @@ def move():
             logging.info("No safe directions, defaulting to legal moves")
     else:
         directions = safe_directions
-    if path_direction in directions and path_direction != "":
-        logging.info("path direction choice")
-        direction = path_direction
-    else:
-        logging.info("random direction choice")
-        direction = random.choice(directions)
+    #if path_direction in directions and path_direction != "":
+    #    logging.info("path direction choice")
+    #    direction = path_direction
+    #else:
+    #    logging.info("random direction choice")
+    #    direction = random.choice(directions)
+    direction = path_direction
     angle = ""
     #pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))

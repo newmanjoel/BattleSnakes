@@ -109,6 +109,7 @@ class Game():
         if target == (-1, -1):
             logging.critical("Found no food, chasing tail")
             return self.go_to_tail(self.board.ms.head, self.board.ms.body[-1])
+        logging.info("Chasing the food at {},{}".format(target[0], target[1]))
         return nx.astar_path(self.board.board, head_t, target)
         
         
