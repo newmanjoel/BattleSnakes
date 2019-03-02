@@ -79,7 +79,7 @@ class Game():
                     if connectiveness == 1:
                         amount_changed += 1
                         something_changed = False
-                        logging.info("Trying to change {}, {}|{}".format(results, results[0], results[1]))
+                        logging.info("Trying to change {}".format((x, y)))
                         try:
                             self.board.board.nodes[(x,y)]["Safe"] = False
                         except Exception as e:
@@ -87,21 +87,11 @@ class Game():
     
     def safe_moves(self, directions, nodes):
         results = []
-        both = zip(directions, nodes)
-        s = nx.get_node_attributes(self.board.board, "Safe")
-        for i in both:
-            logging.info("Trying to lookup safe nodes, {}".format(i))
-            try:
-                r = s[i[1]]
-            except KeyError as e:
-                logging.critical("Cannot find a key in the nodes. {}".format(e))
-                r = False
-            except Exception as e:
-                logging.critical("General issue. {}".format(e))
-                r = False
-            
-            if r == True:
-                results.append(i[0])
+        assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
+        for i in range(len(nodes)):
+            if self.board.is_safe(nodes[i]):
+                results.append(directions[i])
+        
         return results
     
                     
@@ -132,6 +122,10 @@ class Board():
 
     def __str__(self):
         return self.__repr()
+    
+    def is_safe(self, node):
+        #assert(len(node) != 2, "node is not a tuple")
+        return self.board.nodes[(node[0], node[1])]["Safe"]
 
     def set_my_snake(self, snake_id):
         self.ms = None
@@ -139,7 +133,6 @@ class Board():
             if snake.id == snake_id:
                 self.ms = snake
                 break
-
 
     def load_data(self, play_state):
         '''
@@ -206,6 +199,7 @@ class Board():
         if (x, y) in self.board:
             return " "
         return "?"
+
 
 class Snake():
     def __init__(self, snake_info):
@@ -377,3 +371,10 @@ class TD:
 """
 
         self.start = json.loads(self.start)
+        
+if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+    td = TD()
+    game = Game(td.start)
+    [dirs, nods] = game.legal_moves()
+    
