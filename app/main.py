@@ -5,6 +5,8 @@ import bottle
 import logging
 from snake_logic import Game, Snake, Board, TD
 
+from timeit import default_timer as timer
+
 import math, cmath
 import networkx as nx
 from api import ping_response, start_response, move_response, end_response
@@ -72,8 +74,10 @@ def move():
             snake AI must choose a direction to move in.
     """
 
-    logging.debug("Move: {}".format(data))
+    start = timer()
     game = Game(data)
+    end = timer()
+    logging.info("init took {}".format(end-start))
     '''
     z = sum(game.board.calc_vectors(game.my_snake))
     angle = math.degrees(cmath.phase(z))
@@ -96,10 +100,16 @@ def move():
         '''
 
     #logging.info(repr(game.board))
+    start = timer()
     [legal_directions, nodes, safe] = game.legal_moves()
-    logging.info("Head: {}, Legal Directions: {}, Nodes: {}, Safe:{}".format(game.board.ms.head, legal_directions, nodes, safe))
+    end = timer()
+    logging.info("legal moves took {}".format(end-start))
     
+    logging.debug("Head: {}, Legal Directions: {}, Nodes: {}, Safe:{}".format(game.board.ms.head, legal_directions, nodes, safe))
+    start = timer()
     safe_directions = game.safe_moves(legal_directions, nodes)
+    end = timer()
+    logging.info("safe took {}".format(end-start))
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
@@ -114,7 +124,7 @@ def move():
     
     direction = random.choice(directions)
     angle = ""
-    pretty_print(game, direction, angle)
+    #pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
     return move_response(direction)
 
