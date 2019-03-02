@@ -40,6 +40,7 @@ class Game():
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
         legal_nodes = []
+        safe_nodes = []
         self.stored_legal_direction = []
         for node in nodes:
             # node contains 2 elements
@@ -49,23 +50,27 @@ class Game():
             if x_diff > 0:
                 legal_direction.append('left')
                 legal_nodes.append(node)
+                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("L")
             elif x_diff < 0:
                 legal_direction.append('right')
                 legal_nodes.append(node)
+                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("R")
             elif y_diff > 0:
                 legal_direction.append('up')
                 legal_nodes.append(node)
+                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("U")
             elif y_diff < 0:
                 legal_direction.append('down')
                 legal_nodes.append(node)
+                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("D")
             if len(legal_direction) == 4:
                 logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
                         nodes, node, x_diff, y_diff))
-        return [legal_direction, legal_nodes]
+        return [legal_direction, legal_nodes, safe_nodes]
     
     def safe_move_generation(self):
         something_changed = True
@@ -79,7 +84,7 @@ class Game():
                     if connectiveness == 1:
                         amount_changed += 1
                         something_changed = False
-                        logging.debug("Trying to change {}".format((x, y)))
+                        logging.info("Trying to change {}".format((x, y)))
                         try:
                             self.board.board.nodes[(x,y)]["Safe"] = False
                         except Exception as e:

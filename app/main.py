@@ -75,8 +75,7 @@ def move():
     game = Game(data)
     z = sum(game.board.calc_vectors(game.my_snake))
     angle = math.degrees(cmath.phase(z))
-    logging.info("Sum of vectors {}<{}".format(
-            abs(z),angle ))
+    logging.info("Sum of vectors {}<{}".format(abs(z),angle ))
 
     ideal_direction = ""
     direction = ""
@@ -98,12 +97,15 @@ def move():
 
 
     #logging.info(repr(game.board))
-    [legal_directions, nodes] = game.legal_moves()
-    logging.info("Head: {}, Legal Directions: {}, Nodes: {}".format(game.board.ms.head, legal_directions, nodes))
-    safe_directions = game.safe_moves(legal_directions, nodes)
-
-    #if ideal_direction in directions:
-    #    direction = ideal_direction
+    [legal_directions, nodes, safe] = game.legal_moves()
+    logging.info("Head: {}, Legal Directions: {}, Nodes: {}, Safe:{}".format(game.board.ms.head, legal_directions, nodes, safe))
+    #safe_directions = game.safe_moves(legal_directions, nodes)
+    safe_directions = []
+    for i in range(len(safe)):
+        if safe[i]:
+            logging.info("Safe direction {}".format(legal_directions[i]))
+            safe_directions.append(legal_directions[i])
+        
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
             # we are screwed at this point just hope that we are wrong and have luck
