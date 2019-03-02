@@ -77,7 +77,9 @@ def move():
     start = timer()
     game = Game(data)
     end = timer()
+    logging.info("TURN {}".format(game.turn))
     logging.info("init took {}".format(end-start))
+    
     '''
     z = sum(game.board.calc_vectors(game.my_snake))
     angle = math.degrees(cmath.phase(z))
@@ -131,7 +133,7 @@ def move():
 
 @bottle.post('/end')
 def end():
-    data = bottle.request.json
+    #data = bottle.request.json
 
     """
     TODO: If your snake AI was stateful,
