@@ -133,7 +133,6 @@ class Game():
             for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=5):
                 logging.debug("adding the cost of {} edge to {}".format(added_cost, edge))
                 self.board.board.edges[edge]['cost'] += added_cost
-                
     
     def safe_move_generation(self):
         something_changed = True
@@ -150,6 +149,13 @@ class Game():
                         self.board.board.nodes[deg[0]]["Safe"] = False
                     except Exception as e:
                         logging.critical("Cant set safe mode: {}".format(e))
+        for snake in self.board.snakes:
+            if snake == self.board.ms:
+                continue
+            head = (snake.head.x, snake.head.y)
+            for node in nx.bfs_nodes(self.board.board, source=head, depth_limit=2):
+                    logging.debug("adding the cost of {} edge to {}".format(False, node))
+                    self.board.board.nodes[node]['Safe'] = False
 
     def safe_moves(self, directions, nodes):
         results = []
