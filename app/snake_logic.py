@@ -150,13 +150,13 @@ class Game():
                     except Exception as e:
                         logging.critical("Cant set safe mode: {}".format(e))
                         
-        for snake in self.board.snakes:
-            if snake == self.board.ms:
-                continue
-            head = (snake.head.x, snake.head.y)
-            for node in nx.bfs_tree(self.board.board, source=head, depth_limit=1):
-                    logging.info("adding the safeness of {} node to {}".format(False, node))
-                    self.board.board.nodes[node]['Safe'] = False
+        #for snake in self.board.snakes:
+        #    if snake == self.board.ms:
+        #        continue
+        #    head = (snake.head.x, snake.head.y)
+        #    for node in nx.bfs_tree(self.board.board, source=head, depth_limit=1):
+        #            logging.info("adding the safeness of {} node to {}".format(False, node))
+        #            self.board.board.nodes[node]['Safe'] = False
                     
 
     def safe_moves(self, directions, nodes):
