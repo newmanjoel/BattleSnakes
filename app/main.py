@@ -74,11 +74,11 @@ def move():
             snake AI must choose a direction to move in.
     """
 
-    start = timer()
+    start1 = timer()
     game = Game(data)
     end = timer()
     logging.info("TURN {}".format(game.turn))
-    logging.info("init took {}".format(end-start))
+    logging.info("init took {}".format(end-start1))
     
     '''
     z = sum(game.board.calc_vectors(game.my_snake))
@@ -103,11 +103,11 @@ def move():
 
     #logging.info(repr(game.board))
     start = timer()
-    [legal_directions, nodes, safe] = game.legal_moves()
+    [legal_directions, nodes] = game.legal_moves(game.board.ms.head)
     end = timer()
     logging.info("legal moves took {}".format(end-start))
     
-    logging.debug("Head: {}, Legal Directions: {}, Nodes: {}, Safe:{}".format(game.board.ms.head, legal_directions, nodes, safe))
+    logging.debug("Head: {}, Legal Directions: {}, Nodes: {}".format(game.board.ms.head, legal_directions, nodes))
     start = timer()
     safe_directions = game.safe_moves(legal_directions, nodes)
     end = timer()
@@ -128,6 +128,7 @@ def move():
     angle = ""
     #pretty_print(game, direction, angle)
     logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
+    logging.info("Total Time: {}".format(timer()-start1))
     return move_response(direction)
 
 

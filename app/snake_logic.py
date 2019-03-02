@@ -27,21 +27,19 @@ class Game():
         self.my_snake = play_state["you"]["id"]
         self.board.set_my_snake(self.my_snake)
 
-    def legal_moves(self):
+    def legal_moves(self, head):
         try:
-            head = (self.board.ms.head.x, self.board.ms.head.y)
+            nodes = list(nx.neighbors(self.board.board, head))
         except Exception as e:
-            logging.critical("Cannot create Head: {}".format(e))
-            self.stored_legal_direction = []
-            return None
-        nodes = list(nx.neighbors(self.board.board, head))
+            logging.critical("Could not find {} in nodes {}".format(head, self.board.board))
+            return [[],[]]
         logging.debug("The current head has {} legal nodes that are {}".format(len(nodes), nodes))
 
         #directions = ['up', 'down', 'left', 'right']
         legal_direction = []
         legal_nodes = []
-        safe_nodes = []
         self.stored_legal_direction = []
+        
         for node in nodes:
             # node contains 2 elements
             x_diff = head[0] - node[0] # x value
@@ -50,27 +48,26 @@ class Game():
             if x_diff > 0:
                 legal_direction.append('left')
                 legal_nodes.append(node)
-                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("L")
             elif x_diff < 0:
                 legal_direction.append('right')
                 legal_nodes.append(node)
-                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("R")
             elif y_diff > 0:
                 legal_direction.append('up')
                 legal_nodes.append(node)
-                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("U")
             elif y_diff < 0:
                 legal_direction.append('down')
                 legal_nodes.append(node)
-                safe_nodes.append(self.board.board.degree(node) != 1)
                 self.stored_legal_direction.append("D")
             if len(legal_direction) == 4:
                 logging.critical("non-legal move, nodes:{}, node: {}, x_diff: {}, y_diff: {}".format(
                         nodes, node, x_diff, y_diff))
-        return [legal_direction, legal_nodes, safe_nodes]
+        return [legal_direction, legal_nodes]
+    
+    def go_to_tail(self, head, tail):
+        return nx.astar_path(self.board.board, head, self.board.ms.body[-1])
     
     def safe_move_generation(self):
         something_changed = True
@@ -162,9 +159,10 @@ class Board():
         TODO: Confirm that this is correct about the head positions
         '''
         for snake in self.snakes:
-            for body in snake.body:
+            for body in range(len(snake.body)-1):
                 try:
-                    self.board.remove_node((body.x, body.y))
+                    #self.board.remove_node((snake.body[body].x, snake.body[body].y))
+                    self.board.nodes[(snake.body[body].x, snake.body[body].y)]["Safe"] = False
                 except Exception as e:
                     logging.critical(e)
 
@@ -380,5 +378,5 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
     td = TD()
     game = Game(td.start)
-    [dirs, nods,s] = game.legal_moves()
+    [dirs, nods] = game.legal_moves(game.board.ms.head)
     
