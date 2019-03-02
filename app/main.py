@@ -49,7 +49,7 @@ def ping():
 @bottle.post('/start')
 def start():
     data = bottle.request.json
-    logging.warning("The version of network x is {}".format(nx.__version__))
+    
     """
     TODO: If you intend to have a stateful snake AI,
             initialize your snake state here using the
@@ -66,7 +66,7 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-
+    logging.warning("The version of network x is {}".format(nx.__version__))
     """
     TODO: Using the data from the endpoint request object, your
             snake AI must choose a direction to move in.
