@@ -69,39 +69,12 @@ def start():
 @bottle.post('/move')
 def move():
     data = bottle.request.json
-    """
-    TODO: Using the data from the endpoint request object, your
-            snake AI must choose a direction to move in.
-    """
 
     start1 = timer()
     game = Game(data)
     end = timer()
     logging.info("TURN {}".format(game.turn))
     logging.info("init took {}".format(end-start1))
-    
-    '''
-    z = sum(game.board.calc_vectors(game.my_snake))
-    angle = math.degrees(cmath.phase(z))
-    logging.info("Sum of vectors {}<{}".format(abs(z),angle ))
-
-    ideal_direction = ""
-    direction = ""
-
-
-    if angle>45 and angle<135:
-        ideal_direction = 'up'
-    elif angle>135 and angle<=180:
-        ideal_direction = 'left'
-    elif angle<45 and angle>-45:
-        ideal_direction = 'right'
-    elif angle<-45 and angle >-135:
-        ideal_direction = 'down'
-    elif angle<-135 and angle>-180:
-        ideal_direction = 'left'
-        '''
-
-    #logging.info(repr(game.board))
     start = timer()
     [legal_directions, nodes] = game.legal_moves(game.board.ms.head.x, game.board.ms.head.y)
     end = timer()
@@ -112,6 +85,9 @@ def move():
     safe_directions = game.safe_moves(legal_directions, nodes)
     end = timer()
     logging.info("safe took {}".format(end-start))
+    
+    if(game.board.ms.health > 30):
+        logging.info("Want to go {}".format(game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])))
         
     if len(safe_directions)  == 0:
         if len(legal_directions) == 0:
