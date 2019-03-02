@@ -89,7 +89,7 @@ class Game():
         results = []
         both = zip(directions, nodes)
         for i in both:
-            if self.board.board.nodes[i(1)]["Safe"] == True:
+            if self.board.board.nodes[i[1]]["Safe"] == True:
                 results.append(i(0))
         return results
     
