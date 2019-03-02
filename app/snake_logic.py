@@ -106,7 +106,15 @@ class Game():
         max_dist = 100
         path = []
         for i in self.board.food:
-            dist = math.sqrt((i.x-head.x)**2 + (i.y-head.y)**2)
+            #astar_path_length(G, source, target, heuristic=None, weight='weight')
+            x1 = i.x
+            y1 = i.y
+            x2 = head.x
+            y2 = head.y
+            try:
+                dist = nx.astar_path_length(self.board.board, (x2, y2),(x1,y1), weight='cost')
+            except Exception as e:
+                logging.warning("Cant find a path to food at {}".format(i))
             if dist < max_dist:
                 max_dist = dist
                 target = (i.x, i.y)
@@ -130,14 +138,14 @@ class Game():
                 continue
             added_cost = 10
             head = (snake.head.x, snake.head.y)
-            for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=3):
+            for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=2):
                 logging.debug("adding the cost of {} edge to {}".format(added_cost, edge))
                 self.board.board.edges[edge]['cost'] = added_cost
     
     def safe_move_generation(self):
         something_changed = True
         amount_changed = 0
-        while something_changed and amount_changed < 10:
+        while something_changed and amount_changed < 100:
             something_changed = False
             degrees = self.board.board.degree()
             for deg in degrees:
