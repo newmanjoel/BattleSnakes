@@ -113,7 +113,7 @@ def move():
         logging.info("path direction choice")
         direction = path_direction
     else:
-        logging.info("random direction choice")
+        logging.info("random direction choice, path direction is {}".format(path_direction))
         direction = random.choice(directions)
     #direction = path_direction
     angle = ""

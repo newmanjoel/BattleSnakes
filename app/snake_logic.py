@@ -29,7 +29,7 @@ class Game():
 
     def legal_moves(self, x, y):
         head = (x, y)
-        print(head)
+        logging.info("head at {}".format(head))
         try:
             nodes = list(nx.neighbors(self.board.board, head))
         except Exception as e:
@@ -76,13 +76,13 @@ class Game():
             x_diff = starting_node.x - ending_node.x
             y_diff = starting_node.y - ending_node.y
         if x_diff > 0.1:
-            return "left"
+            return 'left'
         elif x_diff < 0.1:
-            return "right"
+            return 'right'
         elif y_diff > 0.1:
-            return "up"
+            return 'up'
         elif y_diff < 0.1:
-            return "down"
+            return 'down'
         
         
     
