@@ -88,7 +88,7 @@ class Game():
     def safe_moves(self, directions, nodes):
         results = []
         both = zip(directions, nodes)
-        s = nx.get_node_attributes(game.board.board, "Safe")
+        s = nx.get_node_attributes(self.board.board, "Safe")
         for i in both:
             logging.info("Trying to lookup safe nodes, {}".format(i))
             r = s[i[1]]
