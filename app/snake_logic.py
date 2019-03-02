@@ -128,11 +128,11 @@ class Game():
         for snake in self.board.snakes:
             if snake == self.board.ms:
                 continue
-            added_cost = 1000
+            added_cost = 100000000
             head = (snake.head.x, snake.head.y)
             for edge in nx.bfs_edges(self.board.board, source=head, depth_limit=3):
                 logging.debug("adding the cost of {} edge to {}".format(added_cost, edge))
-                self.board.board.edges[edge]['cost'] += added_cost
+                self.board.board.edges[edge]['cost'] = added_cost
     
     def safe_move_generation(self):
         something_changed = True
