@@ -151,7 +151,7 @@ class Board():
             self.food.append(Food(fuud))
 
         self.possible_moves()
-        self.calc_distances()
+        #self.calc_distances()
 
     def possible_moves(self):
         '''
