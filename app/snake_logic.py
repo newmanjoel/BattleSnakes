@@ -89,7 +89,7 @@ class Game():
         results = []
         both = zip(directions, nodes)
         for i in both:
-            logging.info("Trying to lookup safe nodes")
+            logging.info("Trying to lookup safe nodes, {}".format(i))
             r = self.board.board.nodes[i[1]]["Safe"]
             if r == True:
                 results.append(i(0))
