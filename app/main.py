@@ -108,7 +108,7 @@ def move():
             directions = legal_directions
             logging.info("No safe directions, defaulting to legal moves")
     else:
-        directions = safe_directions
+        directions = legal_directions
     if path_direction in directions and path_direction != "":
         logging.info("path direction choice")
         direction = path_direction
