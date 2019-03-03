@@ -152,9 +152,8 @@ class Game():
             for deg in degrees:
                 if (deg[1] == 1 or deg[1] ==2) and self.board.board.nodes[deg[0]]["Safe"] == True:
                     amount_changed += 1
-                    
                     something_changed = True
-                    logging.info("Trying to change {}".format(deg[0]))
+                    logging.debug("Trying to change {}".format(deg[0]))
                     try:
                         #self.board.board.remove_node(deg[0])
                         self.board.board.nodes[deg[0]]["Safe"] = False
@@ -182,7 +181,7 @@ class Game():
         #assert(len(directions) != len(nodes), "Nodes and Directions are different lengths")
         for i in range(len(nodes)):
             if self.board.is_safe(nodes[i]):
-                logging.info("{}, {}, found to be safe".format(nodes[i], directions[i]))
+                logging.debug("{}, {}, found to be safe".format(nodes[i], directions[i]))
                 results.append(directions[i])
         
         return results
@@ -201,7 +200,7 @@ class Board():
         self.distances = {}
         self.board = nx.grid_2d_graph(self.height, self.width)
         self.load_data(play_state)
-        logging.info("board created with playspace of {},{}".format(self.height, self.width))
+        logging.debug("board created with playspace of {},{}".format(self.height, self.width))
 
     def __repr__(self):
         text = ""
