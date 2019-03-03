@@ -79,13 +79,13 @@ class Game():
             x_diff = starting_node.x - ending_node.x
             y_diff = starting_node.y - ending_node.y
         logging.info("X: {}, Y: {}".format(x_diff, y_diff))
-        if x_diff > 0.1:
+        if int(x_diff) > 0.1:
             return 'left'
-        elif x_diff < 0.1:
+        elif int(x_diff) < 0.1:
             return 'right'
-        elif y_diff > 0.1:
+        elif int(y_diff) > 0.1:
             return 'up'
-        elif y_diff < 0.1:
+        else:
             return 'down'
 
     def go_to_tail(self, head, tail):
