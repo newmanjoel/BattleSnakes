@@ -127,7 +127,7 @@ class Game():
                 logging.critical("No path found")
         logging.info("Chasing the food at {},{}".format(target[0], target[1]))
         try:
-            path = nx.astar_path(self.board.board, head_t, target, weight='cost')
+            path = nx.astar_path(self.board.board, head_t, target)
         except Exception as e:
             logging.critical("No Path found")
         return path
