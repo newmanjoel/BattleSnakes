@@ -113,10 +113,10 @@ class Game():
             y2 = head.y
             dist = 1000
             try:
-                dist = nx.astar_path_length(self.board.board, (x2, y2),(x1,y1), weight='cost')
+                dist = nx.astar_path_length(self.board.board, (x2, y2),(x1,y1))
             except Exception as e:
                 logging.warning("Cant find a path to food at {}".format(i))
-            if dist < max_dist:
+            if dist <= max_dist:
                 max_dist = dist
                 target = (i.x, i.y)
         if target == (-1, -1):
