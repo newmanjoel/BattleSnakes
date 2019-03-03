@@ -74,12 +74,12 @@ def move():
     game = Game(data)
     end = timer()
     logging.info("TURN {}".format(game.turn))
-    logging.info("init took {}".format(end-start1))
+    logging.debug("init took {}".format(end-start1))
     start = timer()
     [legal_directions, nodes] = game.legal_moves(game.board.ms.head.x, game.board.ms.head.y)
     end = timer()
     logging.debug("legal moves took {}".format(end-start))
-    
+
     logging.debug("Head: {}, Legal Directions: {}, Nodes: {}".format(game.board.ms.head, legal_directions, nodes))
     start = timer()
     safe_directions = game.safe_moves(legal_directions, nodes)
@@ -90,16 +90,23 @@ def move():
         logging.info("chasing tail")
         path = game.go_to_tail(game.board.ms.head, game.board.ms.body[-1])
     else:
-        #find closest food and go for it
         logging.info("chasing food")
         path = game.go_to_closest_food(game.board.ms.head)
     logging.info("Want to take {} path".format(path))
-    
+
     path_direction = ""
     if len(path) > 0:
         path_direction = game.relative_direction(game.board.ms.head, path[1])
-        
-    if len(safe_directions)  == 0:
+
+    '''
+    Logic here is that if there is no safe directions we are screwed, just 
+    hope we had an error and pick a random (hopefully legal) direction.
+    
+    If there are no legal moves then a completely random direction is selected.
+    
+    If the direction that the path wants to take is in the safe directions, use that.
+    '''
+    if len(safe_directions) == 0:
         if len(legal_directions) == 0:
             # we are screwed at this point just hope that we are wrong and have luck
             directions = ['up', 'down', 'left', 'right']
@@ -115,10 +122,8 @@ def move():
     else:
         logging.info("random direction choice, path direction is {}".format(path_direction))
         direction = random.choice(directions)
-    #direction = path_direction
-    angle = ""
-    #pretty_print(game, direction, angle)
-    logging.info("Legal Moves: {}\nChose: {}".format(directions, direction))
+    # pretty_print(game, direction, angle)
+    logging.info("Legal Moves: {}\tChose: {}".format(directions, direction))
     logging.info("Total Time: {}".format(timer()-start1))
     return move_response(direction)
 
