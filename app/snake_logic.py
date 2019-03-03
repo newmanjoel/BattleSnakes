@@ -150,16 +150,17 @@ class Game():
             something_changed = False
             degrees = self.board.board.degree()
             for deg in degrees:
-                if deg[1] == 1 and self.board.board.nodes[deg[0]]["Safe"] == True:
+                if (deg[1] == 1 or deg[1] ==2) and self.board.board.nodes[deg[0]]["Safe"] == True:
                     amount_changed += 1
                     
                     something_changed = True
                     logging.info("Trying to change {}".format(deg[0]))
                     try:
-                        self.board.board.remove_node(deg[0])
-                        #self.board.board.nodes[deg[0]]["Safe"] = False
+                        #self.board.board.remove_node(deg[0])
+                        self.board.board.nodes[deg[0]]["Safe"] = False
                     except Exception as e:
                         logging.critical("Cant set safe mode: {}".format(e))
+                
                         
         
         for snake in self.board.snakes:
