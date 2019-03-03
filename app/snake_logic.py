@@ -150,7 +150,7 @@ class Game():
             something_changed = False
             degrees = self.board.board.degree()
             for deg in degrees:
-                if (deg[1] == 1 or deg[1] ==2) and self.board.board.nodes[deg[0]]["Safe"] == True:
+                if (deg[1] == 1 or deg[1] == 1) and self.board.board.nodes[deg[0]]["Safe"] == True:
                     amount_changed += 1
                     something_changed = True
                     logging.debug("Trying to change {}".format(deg[0]))
